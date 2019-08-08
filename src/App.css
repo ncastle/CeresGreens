@@ -31,3 +31,39 @@
     transform: rotate(360deg);
   }
 }
+
+#dash {
+  display: grid;
+  margin: auto;
+  width: 50vw;
+  height: 30vh;
+  grid-template-columns: 2fr 2fr;
+  grid-template-rows: 2fr 2fr 1fr;
+  grid-template-areas: 
+                "box1 box2"
+                "box3 box4"
+                "box5 box5";
+
+}
+
+
+.box1 {
+  grid-area: "box1";
+  background-color: red;
+}
+.box2 {
+  grid-area: "box2";
+  background-color: blue; 
+}
+.box3 {
+  grid-area: "box3";
+  background-color: green;
+}
+.box4 {
+  grid-area: "box4";
+  background-color: orange;
+}
+.box5 {
+  grid-area: "box5";
+  background-color: yellow;
+}
