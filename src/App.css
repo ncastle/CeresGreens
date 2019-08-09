@@ -33,37 +33,32 @@
 }
 
 #dash {
-  display: grid;
+  display: flex;
+  flex-direction: column; 
+  flex-wrap: wrap;
   margin: auto;
-  width: 50vw;
-  height: 30vh;
-  grid-template-columns: 2fr 2fr;
-  grid-template-rows: 2fr 2fr 1fr;
-  grid-template-areas: 
-                "box1 box2"
-                "box3 box4"
-                "box5 box5";
-
+  width: 60vw;
+  height: 50vh;
 }
 
 
-.box1 {
-  grid-area: "box1";
+#box1 {
+  height:20vh;
   background-color: red;
 }
-.box2 {
-  grid-area: "box2";
+#box2 {
+  height: 20vh;
   background-color: blue; 
 }
-.box3 {
-  grid-area: "box3";
+#box3 {
+  height: 20vh;
   background-color: green;
 }
-.box4 {
-  grid-area: "box4";
+#box4 {
+  height: 20vh;
   background-color: orange;
 }
-.box5 {
-  grid-area: "box5";
+#box5 {
+  height: 20vh;
   background-color: yellow;
 }
