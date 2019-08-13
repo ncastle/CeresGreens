@@ -2,106 +2,93 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-const username = require('./secrets.json').username;
-const password = require('./secrets.json').password;
+const config = require('./config.js');
+const fs = require('fs');
 
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      humidity: null,
-      credentials: {
-        un: username, // username
-        pw: password  // password
+      sensor1: {
+        id: 0,
+        humidity: null,
+        temperature: null
       }
     }
-    this.login = this.login.bind(this);
-    // this.login1 = this.login1.bind(this);
   }
 
-  componentDidMount() {
-    
-    // this.login1();
-    // fetch('https://cloud.openmotics.com/api/v1/base/installations/215/sensors/9', {
-    //   method: 'GET',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'Accept': 'application/json',
-    //   },
-    //   Authorization:'Bearer mhldry0za9m88aa90gu4i7lucf67s7zx',
-    //   mode: 'no-cors'
-    // })
-    // .then(response => response.json())
-    // .then(json => {
-    //   console.log(json);
-    // })
-  }
-
-  login1() {
-    fetch('https://cloud.openmotics.com/api/v1/authentication/basic/login', {
+  async componentDidMount() {
+    console.log({config});
+    console.log(config.password);
+    let token = null;
+    // login using proxy, username and pass
+    await fetch('/proxy/api/v1/authentication/basic/login', {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Access-Control-Origin': '*',
+        'Accept': 'application/json'
       },
-      method: 'post',
-      body: {
-        "username": this.state.credentials.un,
-        "password": this.state.credentials.pw
-      },
-      mode: 'no-cors'
+      body: JSON.stringify({
+        'username': config.username,
+        'password': config.password
+      })
     })
     .then(response => response.json())
     .then(json => {
       console.log(json);
+      console.log(json.data.token);
+      token = json.data.token;      // assign token to token variable
+    });
+
+    console.log('this is the token: ', token);
+
+    // fetch data using a get path
+    // installation-id -> 215, sensor-id -> 0
+    await fetch('/proxy/api/v1/base/installations/215/sensors/0', {
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
     })
-  }
+    .then(response => response.json())
+    .then(json => {
+      console.log(json)
+      console.log({'sensor humidity': json.data.status.humidity}, {'sensor temperature': json.data.status.temperature});
+      console.log(this.state);
+      const { sensor1 } = this.state
+      sensor1.humidity = json.data.status.humidity
+      sensor1.temperature = json.data.status.temperature
+      this.setState({ sensor1 });
+      console.log('state set: ', this.state);
+    });
 
-  login() {
-    var http = require("https");
-
-var options = {
-  "method": "POST",
-  "hostname": "cloud.openmotics.com",
-  "path": "/api/v1/authentication/basic/login",
-  "headers": {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-    "Authorization": "Basic Og==",
-    "Cache-Control": "no-cache",
-    "Host": "cloud.openmotics.com",
-    "Accept-Encoding": "gzip, deflate",
-    "Content-Length": "69",
-    "Connection": "keep-alive",
-    "cache-control": "no-cache"
-  }
-};
-
-var req = http.request(options, function (res) {
-  var chunks = [];
-
-  res.on("data", function (chunk) {
-    chunks.push(chunk);
-  });
-
-  res.on("end", function () {
-    var body = Buffer.concat(chunks);
-    console.log(body.toString());
-  });
-});
-
-req.write(JSON.stringify({ username: this.state.credentials.un, password: this.state.credentials.pw }));
-req.end();
+    // fetch outputs
+    fetch('/proxy/api/v1/base/installations/215/outputs', {
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    .then(response => response.json())
+    .then(json => {
+      console.log(json);
+      // fs.writeFile('./data.json', json.data, (err) => {
+      //   if (err) throw err;
+      //   console.log('file saved!');
+      // })
+    });
   }
 
   render() {
     return (
       <div className="App">
-        <h1>Ceres Green Application</h1>
+        <h1>Ceres Green Application:</h1>
           <div id="dash">
-            <div id="box1">Humidity: {this.state.humidity}</div>
-            <div id="box2">Box 2</div>
+            <div id="box1">Humidity: {this.state.sensor1.humidity}</div>
+            <div id="box2">temperature: {this.state.sensor1.temperature}</div>
             <div id="box3">Box 3</div>
             <div id="box4">Box 4</div>
             <div id="box5">Box 5</div>
