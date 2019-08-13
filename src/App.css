@@ -33,32 +33,48 @@
 }
 
 #dash {
+  border: 3px solid black;
+  padding: 5%;
   display: flex;
   flex-direction: column; 
   flex-wrap: wrap;
   margin: auto;
-  width: 60vw;
-  height: 50vh;
+  width: 80%;
+  height: 80vh;
+}
+
+#dash > div {
+  margin: 3px;
 }
 
 
 #box1 {
-  height:20vh;
+  /* height:20vh; */
+  flex-basis: 32.333%;
+  width: 50%;
   background-color: red;
 }
 #box2 {
-  height: 20vh;
+  /* height: 20vh; */
+  flex-basis: 65.5%;
+  width: 50%;
   background-color: blue; 
 }
 #box3 {
-  height: 20vh;
+  /* height: 20vh; */
+  flex-basis: 32.333%;
+  width: 50%;
   background-color: green;
 }
 #box4 {
-  height: 20vh;
+  /* height: 20vh; */
+  flex-basis: 32.333%;
+  width: 50%;
   background-color: orange;
 }
 #box5 {
-  height: 20vh;
+  /* height: 20vh; */
+  flex-basis: 32.333%;
+  width: 50%;
   background-color: yellow;
 }
