@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 
 const config = require('./config.js');
@@ -53,7 +53,10 @@ class App extends React.Component {
           name: "A3 Pump",
           on: undefined
         },
-      ]
+      ],
+      light: null, // boolean -- "on" or "off"
+      waterTemp: null,
+      waterPump: null, // boolean -- "on" or "off"
     }
     this.openmoticsLogin = this.openmoticsLogin.bind(this);
     this.getOMSensorInfo = this.getOMSensorInfo.bind(this);
@@ -165,15 +168,34 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <h1>Ceres Green Application:</h1>
-          <div id="dash">
-            <div id="box1">Humidity: {this.state.airAvgs.humidity}</div>
-            <div id="box2">temperature: {this.state.airAvgs.temperature}</div>
-            <div id="box3">Box 3</div>
-            <div id="box4">Box 4</div>
-            <div id="box5">Box 5</div>
+        <div id="header">
+          <h1>Ceres Greens</h1>
+          <h2>Basildash</h2>
+        </div>
+        <div id="dash">
+          <div id="topNav">
+            <ul id="navItems">
+              <li>Air</li>
+              <li>Water</li>
+              <li>Light</li>
+            </ul>
           </div>
-      </div>
+          <div id="humidity-content">
+            Humidity: {this.state.airAvgs.humidity}
+            <div id="humidty-img-box">
+              <img src="/wi-day-windy.svg" width="100" height="100" alt="">
+              </img></div>
+          </div>
+          <div id="water-content">Water Temp and Level:
+          <div id="water-img-box">
+              <img src="/wi-humidity.svg" width="150" height="150" alt="">
+              </img></div></div>
+          <div id="light-content">Light:</div>
+          <div id="control-content">Control</div>
+          <div id="alert-content">Alert Items</div>
+          <div id="p">Box p</div>
+        </div>
+      </div >
     );
   }
 }
