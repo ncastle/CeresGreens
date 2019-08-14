@@ -1,5 +1,22 @@
+@import url('https://fonts.googleapis.com/css?family=Quicksand:400,500,600&display=swap');
+* {
+  margin: 0;
+  padding: 0;
+}
+
 .App {
   text-align: center;
+  font-family: "Quicksand"
+}
+
+#root {
+  height: 100vh;
+  background: #FFEFBA;
+  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to top, #FFFFFF, #FFEFBA);
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to top, #FFFFFF, #FFEFBA);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 .App-logo {
@@ -32,49 +49,233 @@
   }
 }
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#header {
+  background-color: #ffffff;
+  background-image: linear-gradient(550deg, #ffffff 0%, #82bc23 74%);
+  letter-spacing: 2px;
+  border-bottom: #282c34 1px solid;
+}
+
 #dash {
-  border: 3px solid black;
-  padding: 5%;
-  display: flex;
-  flex-direction: column; 
-  flex-wrap: wrap;
-  margin: auto;
-  width: 80%;
-  height: 80vh;
+  display: grid;
+  grid-template-columns: 3fr 2fr 3fr;
+  grid-template-rows: 50px 100px 100px;
+  grid-template-areas: "topNav topNav topNav" "main main main " "main2 main2 main2";
+  grid-column-gap: 20px;
+  /* overflow: hidden; */
 }
 
-#dash > div {
-  margin: 3px;
+#topNav {
+  grid-area: topNav;
+  grid-column: 1/3;
+  grid-row: 1;
+  background-color: #61dafb97;
+  /* overflow: hidden; */
 }
 
+#navItems {
+  list-style: none;
+  float: left;
+}
 
-#box1 {
-  /* height:20vh; */
-  flex-basis: 32.333%;
-  width: 50%;
-  background-color: red;
+#navItems li {
+  display: inline-block;
 }
-#box2 {
-  /* height: 20vh; */
-  flex-basis: 65.5%;
-  width: 50%;
-  background-color: blue; 
+
+#humidity-content {
+  background: #cb2d3e;
+  background: linear-gradient(to bottom, #cb2d3e, #ef473a);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  grid-area: main1;
+  grid-column: 1/2;
+  grid-row: 2/3;
+  border-radius: 10px;
+  color: #f5f7fa
 }
-#box3 {
-  /* height: 20vh; */
-  flex-basis: 32.333%;
-  width: 50%;
-  background-color: green;
+
+#humidty-img-box {
+  padding-left: 50px;
 }
-#box4 {
-  /* height: 20vh; */
-  flex-basis: 32.333%;
-  width: 50%;
-  background-color: orange;
+
+#water-content {
+  background: #0575E6;
+  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to bottom, #021B79, #0575E6);
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to bottom, #021B79, #0575E6);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  grid-area: main1;
+  grid-column: 2/3;
+  grid-row: 2/3;
+  border-radius: 10px;
+  color: #f5f7fa
 }
-#box5 {
-  /* height: 20vh; */
-  flex-basis: 32.333%;
-  width: 50%;
+
+#water-img-box {}
+
+#light-content {
+  background: #FFB75E;
+  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to bottom, #ED8F03, #FFB75E);
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to bottom, #ED8F03, #FFB75E);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  grid-area: main2;
+  grid-column: 1/2;
+  grid-row: 3/4;
+  border-radius: 10px;
+  color: #f5f7fa
+}
+
+#alert-content {
   background-color: yellow;
+  grid-area: main2;
+  grid-column: 2/3;
+  grid-row: 3/4;
+  border-radius: 10px;
+  color: #f5f7fa
 }
+
+#p {
+  background-color: pink;
+  grid-area: main3;
+  grid-column: 1/2;
+  grid-row: 4/5;
+  border-radius: 10px;
+  color: #f5f7fa
+}
+
+#control-content {
+  background-color: orange;
+  grid-area: main3;
+  grid-column: 2/3;
+  grid-row: 4/5;
+  border-radius: 10px;
+  color: #f5f7fa
+}
+
+/* ------------------------------------------- */
+
+/* MOBILE / RESPONSIVE */
+
+/* ------------------------------------------- */
+
+@media screen and (max-width: 1000px) {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  #header {
+    background-color: #ffffff;
+    background-image: linear-gradient(550deg, #ffffff 0%, #82bc23 74%);
+    letter-spacing: 2px;
+    border-bottom: #282c34 1px solid;
+  }
+  #dash {
+    margin: 5%;
+    padding: 5%;
+    display: grid;
+    grid-template-columns: calc(50% - 15px) 50%;
+    grid-template-rows: 50px 30vh 20vh 30vh;
+    grid-template-areas: "topNav topNav" "main main" "main2 main2" "main3 main3";
+    grid-gap: 10px 15px;
+  }
+  #topNav {
+    grid-area: topNav;
+    grid-column: 1/3;
+    grid-row: 1/1;
+    background-color: #61dafb97;
+  }
+  #navItems {
+    width: 100%;
+    list-style: none;
+    display: flex;
+  }
+  #navItems li {
+    margin-right: 60px;
+    margin-top: 30px;
+  }
+  /* ------------------------------------------- */
+  /* CONTENT BOXES */
+  /* ------------------------------------------- */
+  #humidity-content {
+    background: #cb2d3e;
+    background: linear-gradient(to bottom, #cb2d3e, #ef473a);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    grid-area: main1;
+    grid-column: 1/2;
+    grid-row: 2/3;
+    border-radius: 10px;
+    color: #f5f7fa
+  }
+  #humidty-img-box {
+    padding-left: 50px;
+  }
+  #water-content {
+    background: #0575E6;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient(to bottom, #021B79, #0575E6);
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #021B79, #0575E6);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    grid-area: main1;
+    grid-column: 2/3;
+    grid-row: 2/3;
+    border-radius: 10px;
+    color: #f5f7fa
+  }
+  #water-img-box {}
+  #light-content {
+    background: #FFB75E;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient(to bottom, #ED8F03, #FFB75E);
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #ED8F03, #FFB75E);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    grid-area: main2;
+    grid-column: 1/2;
+    grid-row: 3/4;
+    border-radius: 10px;
+    color: #f5f7fa
+  }
+  #alert-content {
+    background-color: yellow;
+    grid-area: main2;
+    grid-column: 2/3;
+    grid-row: 3/4;
+    border-radius: 10px;
+    color: #f5f7fa
+  }
+  #p {
+    background-color: pink;
+    grid-area: main3;
+    grid-column: 1/2;
+    grid-row: 4/5;
+    border-radius: 10px;
+    color: #f5f7fa
+  }
+  #control-content {
+    background-color: orange;
+    grid-area: main3;
+    grid-column: 2/3;
+    grid-row: 4/5;
+    border-radius: 10px;
+    color: #f5f7fa
+  }
+}
+
+/* #dash {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        margin: auto;
+        width: 60vw;
+        height: 50vh;
+      } */
