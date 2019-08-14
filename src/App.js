@@ -99,22 +99,23 @@ class App extends React.Component {
     .then(names => console.log(names));
 
     // query influx database for current mean temperature
-    influxdb.query(`SELECT mean("temp") AS "mean_temp" FROM "openmotics"."autogen"."sensor" WHERE ("id"='0' OR "id"='1' OR "id"='2')`)
+    influxdb.query(`SELECT mean("temp") AS "mean_temp", mean("hum") as "mean_hum" FROM "openmotics"."autogen"."sensor" WHERE ("id"='0' OR "id"='1' OR "id"='2')`)
     .then(results => {
       console.log(results[0]);
       const { airAvgs } = this.state;
-      airAvgs.temperature = results[0].mean_temp;
+      airAvgs.temperature = results[0].mean_temp.toFixed(2);
+      airAvgs.humidity = results[0].mean_hum.toFixed(2);
       this.setState({airAvgs});
     })
 
     //query for current mean humidity
-    influxdb.query(`SELECT mean("hum") AS "mean_hum" FROM "openmotics"."autogen"."sensor" WHERE ("id"='0' OR "id"='1' OR "id"='2')`)
-    .then(results => {
-      console.log(results[0]);
-      const { airAvgs } = this.state;
-      airAvgs.humidity = results[0].mean_hum;
-      this.setState({airAvgs});
-    })
+    // influxdb.query(`SELECT mean("hum") AS "mean_hum" FROM "openmotics"."autogen"."sensor" WHERE ("id"='0' OR "id"='1' OR "id"='2')`)
+    // .then(results => {
+    //   console.log(results[0]);
+    //   const { airAvgs } = this.state;
+    //   airAvgs.humidity = results[0].mean_hum;
+    //   this.setState({airAvgs});
+    // })
 
   }
 
@@ -182,6 +183,8 @@ class App extends React.Component {
           </div>
           <div id="air-content">
             Humidity: {this.state.airAvgs.humidity}
+            <br/>
+            Temperature: {this.state.airAvgs.temperature}
             <div id="humidty-img-box">
               <img src="/wi-day-windy.svg" width="100" height="100" alt="">
               </img></div>
