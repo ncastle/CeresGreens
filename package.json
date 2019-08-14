@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "express-http-proxy": "^1.5.1",
+    "influx": "^5.4.0",
     "morgan": "^1.9.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
