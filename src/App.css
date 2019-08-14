@@ -63,12 +63,17 @@
 }
 
 #dash {
+  margin: 5%;
+  padding: 5%;
   display: grid;
-  grid-template-columns: 3fr 2fr 3fr;
-  grid-template-rows: 50px 100px 100px;
-  grid-template-areas: "topNav topNav topNav" "main main main " "main2 main2 main2";
-  grid-column-gap: 20px;
-  /* overflow: hidden; */
+  grid-template-columns: calc(50% - 15px) 50%;
+  grid-template-rows: 50px 30vh 20vh 30vh;
+  grid-template-areas: 
+          "topNav          topNav" 
+          "air-content   water-content" 
+          "light-content  alert-content" 
+          "   p        control-content";
+  grid-gap: 10px 15px;
 }
 
 #topNav {
@@ -88,16 +93,17 @@
   display: inline-block;
 }
 
-#humidity-content {
+#air-content {
   background: #cb2d3e;
   background: linear-gradient(to bottom, #cb2d3e, #ef473a);
   /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  grid-area: main1;
+  grid-area: 'air-content';
   grid-column: 1/2;
   grid-row: 2/3;
   border-radius: 10px;
   color: #f5f7fa
 }
+
 
 #humidty-img-box {
   padding-left: 50px;
@@ -110,7 +116,7 @@
   /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(to bottom, #021B79, #0575E6);
   /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  grid-area: main1;
+  grid-area: 'water-content';
   grid-column: 2/3;
   grid-row: 2/3;
   border-radius: 10px;
@@ -126,7 +132,7 @@
   /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(to bottom, #ED8F03, #FFB75E);
   /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  grid-area: main2;
+  grid-area: 'light-content';
   grid-column: 1/2;
   grid-row: 3/4;
   border-radius: 10px;
@@ -135,7 +141,7 @@
 
 #alert-content {
   background-color: yellow;
-  grid-area: main2;
+  grid-area: 'alert-content';
   grid-column: 2/3;
   grid-row: 3/4;
   border-radius: 10px;
@@ -144,7 +150,7 @@
 
 #p {
   background-color: pink;
-  grid-area: main3;
+  grid-area: 'p';
   grid-column: 1/2;
   grid-row: 4/5;
   border-radius: 10px;
@@ -153,7 +159,7 @@
 
 #control-content {
   background-color: orange;
-  grid-area: main3;
+  grid-area: 'control-content';
   grid-column: 2/3;
   grid-row: 4/5;
   border-radius: 10px;
