@@ -104,8 +104,10 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <h1>Ceres Green</h1>
-        <h2>Basildash</h2>
+        <div id="header">
+          <h1>Ceres Greens</h1>
+          <h2>Basildash</h2>
+        </div>
         <div id="dash">
           <div id="topNav">
             <ul id="navItems">
@@ -114,14 +116,22 @@ class App extends React.Component {
               <li>Light</li>
             </ul>
           </div>
-          <div id="h">Humidity: {this.state.humidity}</div>
-          <div id="w">Water Temp and Level:</div>
-          <div id="l">Light:</div>
-          <div id="c">Box c</div>
-          <div id="a">Box a</div>
+          <div id="humidity-content">
+            Humidity: {this.state.humidity}
+            <div id="humidty-img-box">
+              <img src="/wi-day-windy.svg" width="100" height="100" alt="">
+              </img></div>
+          </div>
+          <div id="water-content">Water Temp and Level:
+          <div id="water-img-box">
+              <img src="/wi-humidity.svg" width="150" height="150" alt="">
+              </img></div></div>
+          <div id="light-content">Light:</div>
+          <div id="control-content">Control</div>
+          <div id="alert-content">Alert Items</div>
           <div id="p">Box p</div>
         </div>
-      </div>
+      </div >
     );
   }
 }
