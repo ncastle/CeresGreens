@@ -180,7 +180,7 @@ class App extends React.Component {
               <li>Light</li>
             </ul>
           </div>
-          <div id="humidity-content">
+          <div id="air-content">
             Humidity: {this.state.airAvgs.humidity}
             <div id="humidty-img-box">
               <img src="/wi-day-windy.svg" width="100" height="100" alt="">
