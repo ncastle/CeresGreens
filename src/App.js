@@ -1,9 +1,10 @@
 import React from 'react';
 // import logo from './logo.svg';
 import './App.css';
+import waterpump from './imgs/water-pump.svg';
 
 const config = require('./config.js');
-const fs = require('fs');
+// const fs = require('fs');
 // require influx for use in app
 const Influx = require('influx');
 
@@ -15,6 +16,10 @@ class App extends React.Component {
       installationId: config.installationId,
       airAvgs: {
         humidity: null,
+        temperature: null
+      },
+      waterAvgs: {
+        level: null,
         temperature: null
       },
       sensors: [
@@ -54,9 +59,8 @@ class App extends React.Component {
           on: undefined
         },
       ],
-      light: null, // boolean -- "on" or "off"
-      waterTemp: null,
-      waterPump: null, // boolean -- "on" or "off"
+      lights: undefined, // boolean -- "on" or "off"
+      waterPumps: undefined, // boolean -- "on" or "off"
     }
     this.openmoticsLogin = this.openmoticsLogin.bind(this);
     this.getOMSensorInfo = this.getOMSensorInfo.bind(this);
@@ -100,18 +104,43 @@ class App extends React.Component {
     influxdb.getDatabaseNames()
     .then(names => console.log(names));
 
-    // query influx database for current mean temperature
-    influxdb.query(`SELECT mean("temp") AS "mean_temp", mean("hum") as "mean_hum" 
+    // query influx database for current mean temperature and humidity of air
+    let queryResults = await influxdb.query(`SELECT mean("temp") AS "mean_temp", mean("hum") as "mean_hum" 
                     FROM "openmotics"."autogen"."sensor" WHERE time > (now() - 30s)
                     AND ("id"='0' OR "id"='1' OR "id"='2')`)
-    .then(results => {
-      console.log(results[0]);
-      const { airAvgs } = this.state;
-      airAvgs.temperature = results[0].mean_temp.toFixed(2);
-      airAvgs.humidity = results[0].mean_hum.toFixed(2);
-      this.setState({airAvgs});
-    })
 
+      console.log(queryResults[0]);
+      const { airAvgs } = this.state;
+      airAvgs.temperature = queryResults[0].mean_temp.toFixed(2);
+      airAvgs.humidity = queryResults[0].mean_hum.toFixed(2);
+      this.setState({airAvgs});
+
+    // query influxdb for status of lights
+    queryResults = await influxdb.query(`SELECT last("value") AS "last_value" 
+                    FROM "openmotics"."autogen"."output" 
+                    WHERE ("id"='14' OR "id"='15')`)
+    console.log(queryResults);
+    let status = true;
+    if (queryResults[0].last_value === 0) status = false;
+    this.setState({lights: status});
+
+
+    // query influxdb for status of pumps
+    queryResults = await influxdb.query(`SELECT last("value") AS "last_value" 
+                    FROM "openmotics"."autogen"."output" 
+                    WHERE ("id"='5' OR "id"='6' OR "id"='7')`)
+    console.log(queryResults[0]);
+    status = true;
+    if (queryResults[0].last_value === 0) status = false;
+    const { outputs } = this.state;
+    if (status) {
+      outputs.forEach(output => output.on = true);
+    } else {
+      outputs.forEach(output => output.on = false);
+    }
+    this.setState({outputs});
+    this.setState({waterPumps: status});
+    console.log(this.state);
   }
 
   // function takes a username and password for openmotics, logs in,
@@ -154,14 +183,20 @@ class App extends React.Component {
       console.log({'sensor humidity': json.data.status.humidity}, {'sensor temperature': json.data.status.temperature});
       console.log(this.state);
       const { airAvgs } = this.state
-      // airAvgs.humidity = json.data.status.humidity
-      // airAvgs.temperature = json.data.status.temperature
-      // this.setState({ airAvgs });
+      airAvgs.humidity = json.data.status.humidity
+      airAvgs.temperature = json.data.status.temperature
+      this.setState({ airAvgs });
       console.log('state set: ', this.state);
     });
   }
 
   render() {
+    console.log(this.state.waterPumps)
+    console.log(this.state.lights)
+    let pumpStatus = "OFF";
+    if (this.state.waterPumps) pumpStatus = "ON";
+    let lightStatus = "OFF";
+    if (this.state.lights) lightStatus = "ON";
     return (
       <div className="App">
         <div id="header">
@@ -186,14 +221,28 @@ class App extends React.Component {
               <div className="info-text hum">H: {this.state.airAvgs.humidity}%</div>
             </div>
           </div>
-          <div id="water-content">Water Temp and Level:
-          <div id="water-img-box">
-              <img src="/wi-humidity.svg" width="150" height="150" alt="">
-              </img></div></div>
-          <div id="light-content">Light:</div>
+          
+          <div id="water-content">
+            Water Temp and Level:
+            <div id="water-img-box">
+                <img src="/wi-humidity.svg" width="150" height="150" alt=""/>
+            </div>
+          </div>
+          <div id="light-content">
+            Lights: <br/>
+            {lightStatus}
+            </div>
           <div id="control-content">Control</div>
-          <div id="alert-content">Alert Items</div>
-          <div id="p">Box p</div>
+          <div id="alert-content">
+            <img src={waterpump} width='150px' height="150px" alt="water pump svg"/>
+            Water Pump Status: <br/>{pumpStatus}
+          </div>
+          <div id="p">
+            Alert Log:
+            <div id="alert-box">
+
+            </div>
+          </div>
         </div>
       </div >
     );
