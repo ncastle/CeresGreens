@@ -8,6 +8,7 @@ const config = require('./src/config');
 const app = express();
 const port = process.env.PORT || 5000;
 
+// test comment
 app.use(morgan('dev'));
 app.use(express.static('build'));
 app.use('/proxy', proxy(config.baseurl));

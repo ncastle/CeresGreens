@@ -18,7 +18,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "serve": "node proxy_server.js"
+    "serve": "nodemon -i ./build -i ./src node proxy_server.js"
   },
   "eslintConfig": {
     "extends": "react-app"
