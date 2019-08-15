@@ -67,7 +67,7 @@ class App extends React.Component {
   }
 
   async componentDidMount() {
-    console.log({config});
+    console.log({ config });
     console.log(config.password);
     let token = null;
     /*** OpenMotics ***/
@@ -88,32 +88,32 @@ class App extends React.Component {
         'Authorization': `Bearer ${token}`
       }
     })
-    .then(response => response.json())
-    .then(json => {
-      console.log(json);
-    });
+      .then(response => response.json())
+      .then(json => {
+        console.log(json);
+      });
 
     /*** InfluxDB ***/
 
     // url to database: https://gigawatt-dbd9c7a7.influxcloud.net:8086
 
     // testing querying the influx database
-    const influxdb =  new Influx.InfluxDB(`https://${config.dbusername}:${config.dbpassword}@gigawatt-dbd9c7a7.influxcloud.net:8086/openmotics`);
-    
+    const influxdb = new Influx.InfluxDB(`https://${config.dbusername}:${config.dbpassword}@gigawatt-dbd9c7a7.influxcloud.net:8086/openmotics`);
+
     console.log('connected to database?');
     influxdb.getDatabaseNames()
-    .then(names => console.log(names));
+      .then(names => console.log(names));
 
     // query influx database for current mean temperature and humidity of air
     let queryResults = await influxdb.query(`SELECT mean("temp") AS "mean_temp", mean("hum") as "mean_hum" 
                     FROM "openmotics"."autogen"."sensor" WHERE time > (now() - 30s)
                     AND ("id"='0' OR "id"='1' OR "id"='2')`)
 
-      console.log(queryResults[0]);
-      const { airAvgs } = this.state;
-      airAvgs.temperature = queryResults[0].mean_temp.toFixed(2);
-      airAvgs.humidity = queryResults[0].mean_hum.toFixed(2);
-      this.setState({airAvgs});
+    console.log(queryResults[0]);
+    const { airAvgs } = this.state;
+    airAvgs.temperature = queryResults[0].mean_temp.toFixed(2);
+    airAvgs.humidity = queryResults[0].mean_hum.toFixed(2);
+    this.setState({airAvgs});
 
     // query influxdb for status of lights
     queryResults = await influxdb.query(`SELECT last("value") AS "last_value" 
@@ -158,12 +158,12 @@ class App extends React.Component {
         'password': password
       })
     })
-    .then(response => response.json())
-    .then(json => {
-      console.log(json);
-      console.log(json.data.token);
-      return json.data.token;      // assign token to token variable
-    });
+      .then(response => response.json())
+      .then(json => {
+        console.log(json);
+        console.log(json.data.token);
+        return json.data.token;      // assign token to token variable
+      });
   }
 
   // get OpenMotics sensor information
@@ -204,21 +204,25 @@ class App extends React.Component {
           <h2>Basildash</h2>
         </div>
         <div id="dash">
-          <div id="topNav">
+          {/* <div id="topNav">
             <ul id="navItems">
               <li>Air</li>
               <li>Water</li>
               <li>Light</li>
             </ul>
-          </div>
+          </div> */}
           <div id="air-content">
             {/* <div className="label">Air:</div>  */}
-            <div id="humidty-img-box">
-              <img src="/wi-day-windy.svg" width="100" height="100" alt=""/>
+            <div id="air-img-box">
+              <img src="/wi-day-windy.svg" width="100" height="100" alt="" />
             </div>
-            <div>
-              <div className="info-text">T: {this.state.airAvgs.temperature}&#176;C</div>
-              <div className="info-text hum">H: {this.state.airAvgs.humidity}%</div>
+            <div id="air-container">
+              <div className="info-text">{this.state.airAvgs.temperature}&#176;C
+            <div className="label1">Temperature</div>
+              </div>
+              <div className="info-text hum">{this.state.airAvgs.humidity}%
+              <div className="label2">Humidity</div>
+              </div>
             </div>
           </div>
           
