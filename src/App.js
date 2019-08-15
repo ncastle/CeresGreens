@@ -72,7 +72,9 @@ class App extends React.Component {
 
     console.log('this is the token: ', token);
 
-    await this.getOMSensorInfo(token, 0);
+    // await this.getOMSensorInfo(token, 0);
+    // await this.getOMSensorInfo(token, 1);
+    // await this.getOMSensorInfo(token, 2);
 
     // fetch outputs
     await fetch('/proxy/api/v1/base/installations/215/outputs', {
@@ -99,7 +101,9 @@ class App extends React.Component {
     .then(names => console.log(names));
 
     // query influx database for current mean temperature
-    influxdb.query(`SELECT mean("temp") AS "mean_temp", mean("hum") as "mean_hum" FROM "openmotics"."autogen"."sensor" WHERE ("id"='0' OR "id"='1' OR "id"='2')`)
+    influxdb.query(`SELECT mean("temp") AS "mean_temp", mean("hum") as "mean_hum" 
+                    FROM "openmotics"."autogen"."sensor" WHERE time > (now() - 30s)
+                    AND ("id"='0' OR "id"='1' OR "id"='2')`)
     .then(results => {
       console.log(results[0]);
       const { airAvgs } = this.state;
@@ -107,15 +111,6 @@ class App extends React.Component {
       airAvgs.humidity = results[0].mean_hum.toFixed(2);
       this.setState({airAvgs});
     })
-
-    //query for current mean humidity
-    // influxdb.query(`SELECT mean("hum") AS "mean_hum" FROM "openmotics"."autogen"."sensor" WHERE ("id"='0' OR "id"='1' OR "id"='2')`)
-    // .then(results => {
-    //   console.log(results[0]);
-    //   const { airAvgs } = this.state;
-    //   airAvgs.humidity = results[0].mean_hum;
-    //   this.setState({airAvgs});
-    // })
 
   }
 
@@ -159,9 +154,9 @@ class App extends React.Component {
       console.log({'sensor humidity': json.data.status.humidity}, {'sensor temperature': json.data.status.temperature});
       console.log(this.state);
       const { airAvgs } = this.state
-      airAvgs.humidity = json.data.status.humidity
-      airAvgs.temperature = json.data.status.temperature
-      this.setState({ airAvgs });
+      // airAvgs.humidity = json.data.status.humidity
+      // airAvgs.temperature = json.data.status.temperature
+      // this.setState({ airAvgs });
       console.log('state set: ', this.state);
     });
   }
@@ -182,12 +177,14 @@ class App extends React.Component {
             </ul>
           </div>
           <div id="air-content">
-            Humidity: {this.state.airAvgs.humidity}
-            <br/>
-            Temperature: {this.state.airAvgs.temperature}
+            {/* <div className="label">Air:</div>  */}
             <div id="humidty-img-box">
-              <img src="/wi-day-windy.svg" width="100" height="100" alt="">
-              </img></div>
+              <img src="/wi-day-windy.svg" width="100" height="100" alt=""/>
+            </div>
+            <div>
+              <div className="info-text">T: {this.state.airAvgs.temperature}&#176;C</div>
+              <div className="info-text hum">H: {this.state.airAvgs.humidity}%</div>
+            </div>
           </div>
           <div id="water-content">Water Temp and Level:
           <div id="water-img-box">

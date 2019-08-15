@@ -105,9 +105,9 @@
 }
 
 
-#humidty-img-box {
+/* #humidty-img-box {
   padding-left: 50px;
-}
+} */
 
 #water-content {
   background: #0575E6;
@@ -199,8 +199,6 @@
   }
   #topNav {
     grid-area: topNav;
-    grid-column: 1/3;
-    grid-row: 1/1;
     background-color: #61dafb97;
   }
   #navItems {
@@ -216,17 +214,22 @@
   /* CONTENT BOXES */
   /* ------------------------------------------- */
   #air-content {
+    display: flex;
+    /* flex-direction: column; */
+    /* align-content: center; */
+    justify-content: space-evenly;
     background: #cb2d3e;
     background: linear-gradient(to bottom, #cb2d3e, #ef473a);
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     grid-area: 'air-content';
-    grid-column: 1/2;
-    grid-row: 2/3;
     border-radius: 10px;
     color: #f5f7fa
   }
   #humidty-img-box {
-    padding-left: 50px;
+    /* padding-left: 50px; */
+    align-self: flex-start;
+    /* margin-left: 5%; */
+    margin-top: 5%;
   }
   #water-content {
     background: #0575E6;
@@ -236,8 +239,6 @@
     background: linear-gradient(to bottom, #021B79, #0575E6);
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     grid-area: 'water-content';
-    grid-column: 2/3;
-    grid-row: 2/3;
     border-radius: 10px;
     color: #f5f7fa
   }
@@ -250,42 +251,43 @@
     background: linear-gradient(to bottom, #ED8F03, #FFB75E);
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     grid-area: 'light-content';
-    grid-column: 1/2;
-    grid-row: 3/4;
     border-radius: 10px;
     color: #f5f7fa
   }
   #alert-content {
     background-color: yellow;
     grid-area: 'alert-content';
-    grid-column: 2/3;
-    grid-row: 3/4;
     border-radius: 10px;
     color: #f5f7fa
   }
   #p {
     background-color: pink;
     grid-area: 'p';
-    grid-column: 1/2;
-    grid-row: 4/5;
     border-radius: 10px;
     color: #f5f7fa
   }
   #control-content {
     background-color: orange;
     grid-area: 'control-content';
-    grid-column: 2/3;
-    grid-row: 4/5;
     border-radius: 10px;
     color: #f5f7fa
   }
+  
+  .label {
+    margin-left: 5%;
+    margin-top: 5%;
+    font-size: 1.2rem;
+    align-self: start;
+  }
+  .info-text {
+    align-self: flex-end;
+    margin-right: 5%;
+    /* margin-bottom: 5%; */
+    font-weight: bold;
+    font-size: 2em;
+    margin-top: 10px;
+  }
+  .hum {
+    font-size: 1.5em;
+  }
 }
-
-/* #dash {
-        display: flex;
-        flex-direction: column;
-        flex-wrap: wrap;
-        margin: auto;
-        width: 60vw;
-        height: 50vh;
-      } */
