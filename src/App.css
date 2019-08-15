@@ -172,8 +172,8 @@
   }
 
   #air-container {
-    position: absolute;
-    left: 50%;
+    position: relative;
+    left: 20%;
   }
 
   #air-img-box>img {
