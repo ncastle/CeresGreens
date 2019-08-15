@@ -164,7 +164,6 @@
   /* ------------------------------------------- */
 
   #air-content {
-    position: relative;
     background: #FC5130;
     grid-area: air-content;
     border-radius: 2px;
@@ -173,15 +172,15 @@
 
   #air-container {
     position: relative;
-    left: 20%;
+    float: right;
+    overflow: hidden;
   }
 
   #air-img-box>img {
     position: relative;
-    left: -30%;
+    float: left;
     /* padding-left: 50px; */
     /* margin-left: 5%; */
-    margin-top: 5%;
   }
 
   .info-text {
