@@ -238,7 +238,7 @@ class App extends React.Component {
           
           <div id="water-content">
             <div id="water-img-box">
-                <img src={drop} width="120px" height="120px" alt=""/>
+                <img src={dropborder} width="120px" height="120px" alt=""/>
             </div>
             <div id="water-container">
               <div className="info-text">15&#176;C
