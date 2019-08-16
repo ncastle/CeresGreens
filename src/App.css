@@ -1,6 +1,6 @@
   /* ------------------------------------------- */
 
-                /* COLOR PALETTE */
+  /* COLOR PALETTE */
 
   /* -------------------------------------------
   BLUE => #1E3F6C 
@@ -24,19 +24,15 @@
   }
 
   #root {
-    height: 100vh;
-    background: #FFEFBA;
-    /* fallback for old browsers */
-    background: -webkit-linear-gradient(to top, #FFFFFF, #FFEFBA);
-    /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to top, #FFFFFF, #FFEFBA);
-    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.3), #000), url(./imgs/basil-blur-close-up-1391505.jpg);
+    background-size: cover;
+    background-position: center;
+    height: 120vh;
   }
-
 
   /* ------------------------------------------- */
 
-                  /* Desktop */
+  /* Desktop */
 
   /* ------------------------------------------- */
 
@@ -59,14 +55,11 @@
     display: grid;
     grid-template-columns: calc(50% - 15px) 50%;
     grid-template-rows: 27vh 27vh 27vh;
-    grid-template-areas: 
-              "air-content   water-content" 
-              "light-content  pump-content" 
-              "alert-content control-content";
+    grid-template-areas: "air-content   water-content" "light-content  pump-content" "alert-content control-content";
     grid-gap: 10px;
   }
 
-  #dash > div {
+  #dash>div {
     border: 2px solid gray;
   }
 
@@ -105,7 +98,6 @@
     /* float: right; */
     /* overflow: hidden; */
     /* padding-right: 5%; */
-    
   }
 
   #air-img-box>img {}
@@ -172,7 +164,7 @@
     border-radius: 2px;
     color: #f5f7fa
   }
-  
+
   #pump-img-box {}
 
   #pump-text {
@@ -209,24 +201,17 @@
     align-self: start;
   }
 
-@media screen and (max-width: 748px) {
-  #dash {
-    margin: auto;
-    padding: 5%;
-    display: grid;
-    grid-template-columns: 100%;
-    grid-template-rows: repeat(6, 25vh);
-    grid-template-areas: 
-              "air-content"
-              "water-content" 
-              "light-content"
-              "pump-content"
-              "alert-content"
-              "control-content";
-    grid-gap: 10px;
+  @media screen and (max-width: 748px) {
+    #dash {
+      margin: auto;
+      padding: 5%;
+      display: grid;
+      grid-template-columns: 100%;
+      grid-template-rows: repeat(6, 25vh);
+      grid-template-areas: "air-content" "water-content" "light-content" "pump-content" "alert-content" "control-content";
+      grid-gap: 10px;
+    }
+    .info-text {
+      font-size: 2.3em;
+    }
   }
-  .info-text {
-    font-size: 2.3em;
-  }
-
-}
