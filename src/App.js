@@ -72,6 +72,7 @@ class App extends React.Component {
     }
     this.openmoticsLogin = this.openmoticsLogin.bind(this);
     this.getOMSensorInfo = this.getOMSensorInfo.bind(this);
+    this.cToF = this.cToF.bind(this);
   }
 
   async componentDidMount() {
@@ -119,7 +120,7 @@ class App extends React.Component {
 
     console.log(queryResults[0]);
     const { airAvgs } = this.state;
-    airAvgs.temperature = queryResults[0].mean_temp.toFixed(2);
+    airAvgs.temperature = this.cToF(queryResults[0].mean_temp).toFixed(2);
     airAvgs.humidity = queryResults[0].mean_hum.toFixed(2);
     this.setState({airAvgs});
 
@@ -198,13 +199,17 @@ class App extends React.Component {
     });
   }
 
+  cToF(celsius) { 
+    return celsius * 9 / 5 + 32;
+  }
+
   render() {
     console.log(this.state.waterPumps)
     console.log(this.state.lights)
     let pumpStatus = "OFF";
     if (this.state.waterPumps) pumpStatus = "ON";
-    let lightStatus = "OFF";
-    if (this.state.lights) lightStatus = "ON";
+    let lightStatus = "ON";
+    // if (this.state.lights) lightStatus = "ON";
     return (
       <div className="App">
         <div id="header">
@@ -227,7 +232,7 @@ class App extends React.Component {
               <img src={wind} width="120px" height="120px" alt="" />
             </div>
             <div id="air-container">
-              <div className="info-text">{this.state.airAvgs.temperature}&#176;C
+              <div className="info-text">{this.state.airAvgs.temperature}&#176;F
               <div className="label1">Temperature</div>
               </div>
               <div className="info-text hum">{this.state.airAvgs.humidity}%

@@ -87,7 +87,7 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background: rgba(80, 80, 80, 0.5);
+    background: rgba(0, 0, 0, 0.55);
     grid-area: air-content;
     border-radius: 2px;
     color: #f5f7fa
@@ -126,7 +126,7 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background: rgba(80, 80, 80, 0.5);
+    background: rgba(0, 0, 0, 0.55);
     grid-area: water-content;
     border-radius: 2px;
     color: #f5f7fa
@@ -138,7 +138,7 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background: rgba(80, 80, 80, 0.5);
+    background: rgba(0, 0, 0, 0.55);
     /* fallback for old browsers */
     /* background: -webkit-linear-gradient(to bottom, #ED8F03, #FFB75E); */
     /* Chrome 10-25, Safari 5.1-6 */
@@ -159,7 +159,7 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background-color: rgba(80, 80, 80, 0.5);
+    background-color: rgba(0, 0, 0, 0.55);
     grid-area: pump-content;
     border-radius: 2px;
     color: #f5f7fa
@@ -172,7 +172,7 @@
   }
 
   #alert-content {
-    background-color: rgba(80, 80, 80, 0.5);
+    background-color: rgba(0, 0, 0, 0.55);
     grid-area: alert-content;
     border-radius: 2px;
     color: #f5f7fa
@@ -188,7 +188,7 @@
   }
 
   #control-content {
-    background-color: rgba(80, 80, 80, 0.5);
+    background-color: rgba(0, 0, 0, 0.55);
     grid-area: control-content;
     border-radius: 2px;
     color: #f5f7fa
@@ -201,17 +201,31 @@
     align-self: start;
   }
 
-  @media screen and (max-width: 748px) {
-    #dash {
-      margin: auto;
-      padding: 5%;
-      display: grid;
-      grid-template-columns: 100%;
-      grid-template-rows: repeat(6, 25vh);
-      grid-template-areas: "air-content" "water-content" "light-content" "pump-content" "alert-content" "control-content";
-      grid-gap: 10px;
-    }
-    .info-text {
-      font-size: 2.3em;
-    }
+@media screen and (max-width: 748px) {
+  #dash {
+    margin: auto;
+    padding: 5%;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: repeat(6, 25vh);
+    grid-template-areas: 
+              "air-content"
+              "water-content" 
+              "light-content"
+              "pump-content"
+              "alert-content"
+              "control-content";
+    grid-gap: 10px;
   }
+  .info-text {
+    font-size: 2.3em;
+  }
+
+}
+
+@media screen and (min-width: 1024px) {
+  img {
+    width: 150px;
+    height: 150px;
+  }
+}
