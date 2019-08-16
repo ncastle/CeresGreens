@@ -203,7 +203,7 @@ class App extends React.Component {
     console.log(this.state.lights)
     let pumpStatus = "OFF";
     if (this.state.waterPumps) pumpStatus = "ON";
-    let lightStatus = "ON";
+    let lightStatus = "OFF";
     if (this.state.lights) lightStatus = "ON";
     return (
       <div className="App">
@@ -238,18 +238,25 @@ class App extends React.Component {
           
           <div id="water-content">
             <div id="water-img-box">
-                <img src={drop} width="100px" height="100px" alt=""/>
+                <img src={drop} width="120px" height="120px" alt=""/>
             </div>
-            Water Temp and Level:
+            <div id="water-container">
+              <div className="info-text">15&#176;C
+              <div className="label1">Temperature</div>
+              </div>
+              <div className="info-text hum"> -1
+              <div className="label2">Level</div>
+              </div>
+            </div>
           </div>
 
           <div id="light-content">
             <div id="light-img-box">
               { (lightStatus === "ON") &&
-                <img src={bulbOn} width="100px" height="100px" alt=""/>
+                <img src={bulbOn} width="120px" height="120px" alt=""/>
               }
               { (lightStatus === "OFF") &&
-                <img src={bulbOff} width="100px" height="100px" alt=""/>
+                <img src={bulbOff} width="120px" height="120px" alt=""/>
               }
             </div>
             <div id="light-text">
@@ -263,7 +270,7 @@ class App extends React.Component {
 
           <div id="control-content">Control</div>
 
-          <div id="alert-content">
+          <div id="pump-content">
             <div id="pump-img-box">
               {/* <img src={waterpump} width="100px" height="100px" alt="water pump svg"/> */}
               { (pumpStatus === "ON") &&
@@ -282,7 +289,7 @@ class App extends React.Component {
             </div>
           </div>
 
-          <div id="p">
+          <div id="alert-content">
             Alert Log:
             <div id="alert-box"></div>
           </div>
