@@ -94,7 +94,7 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background: #FC5130;
+    background: rgba(80, 80, 80, 0.5);
     grid-area: air-content;
     border-radius: 2px;
     color: #f5f7fa
@@ -134,7 +134,7 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background: #1E3F6C;
+    background: rgba(80, 80, 80, 0.5);
     grid-area: water-content;
     border-radius: 2px;
     color: #f5f7fa
@@ -146,11 +146,11 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background: #FFB75E;
+    background: rgba(80, 80, 80, 0.5);
     /* fallback for old browsers */
-    background: -webkit-linear-gradient(to bottom, #ED8F03, #FFB75E);
+    /* background: -webkit-linear-gradient(to bottom, #ED8F03, #FFB75E); */
     /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to bottom, #ED8F03, #FFB75E);
+    /* background: linear-gradient(to bottom, #ED8F03, #FFB75E); */
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     grid-area: light-content;
     border-radius: 2px;
@@ -167,7 +167,7 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background-color: #41BCEA;
+    background-color: rgba(80, 80, 80, 0.5);
     grid-area: pump-content;
     border-radius: 2px;
     color: #f5f7fa
@@ -180,7 +180,7 @@
   }
 
   #alert-content {
-    background-color: pink;
+    background-color: rgba(80, 80, 80, 0.5);
     grid-area: alert-content;
     border-radius: 2px;
     color: #f5f7fa
@@ -196,7 +196,7 @@
   }
 
   #control-content {
-    background-color: orange;
+    background-color: rgba(80, 80, 80, 0.5);
     grid-area: control-content;
     border-radius: 2px;
     color: #f5f7fa
