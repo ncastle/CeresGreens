@@ -33,92 +33,12 @@
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   }
 
-  /* * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  #header {
-    background-color: #ffffff;
-    background-image: linear-gradient(550deg, #ffffff 0%, #82bc23 74%);
-    letter-spacing: 2px;
-    border-bottom: #282c34 1px solid;
-    padding-bottom: 20px;
-  }
-
-  #header h1, h2 {
-    padding-top: 10px;
-  }
-
-  #dash {
-    margin: 5%;
-    padding: 5%;
-    display: grid;
-    grid-template-columns: calc(50% - 15px) 50%;
-    grid-template-rows: 30vh 20vh 30vh;
-    grid-template-areas: "air-content   water-content" "light-content  alert-content" "   p        control-content";
-    grid-gap: 10px 15px;
-  }
-
-  #air-content {
-    background: #FC5130;
-    grid-area: air-content;
-    border-radius: 2px;
-    color: #f5f7fa
-  } */
-
-  /* #humidty-img-box {
-  padding-left: 50px;
-} */
-
-  /* #water-content {
-    background: #1E3F6C;
-    grid-area: water-content;
-    border-radius: 10px;
-    color: #f5f7fa
-  }
-
-  #water-img-box {}
-
-  #light-content {
-    background: #FFB75E;
-    background: -webkit-linear-gradient(to bottom, #ED8F03, #FFB75E);
-    background: linear-gradient(to bottom, #ED8F03, #FFB75E);
-    grid-area: light-content;
-    border-radius: 2px;
-    color: #f5f7fa
-  } */
-
-  /* 
-  #alert-content {
-    background-color: yellow;
-    grid-area: alert-content;
-    border-radius: 2px;
-    color: #f5f7fa
-  }
-
-  #p {
-    background-color: pink;
-    grid-area: p;
-    border-radius: 2px;
-    color: #f5f7fa
-  } */
-
-  /* #control-content {
-    background-color: orange;
-    grid-area: control-content;
-    border-radius: 2px;
-    color: #f5f7fa
-  } */
 
   /* ------------------------------------------- */
 
-  /* MOBILE / RESPONSIVE */
+  /* Desktop */
 
   /* ------------------------------------------- */
-
-  /* @media screen and (max-width: 1000px) { */
 
   * {
     margin: 0;
@@ -134,13 +54,17 @@
   }
 
   #dash {
-    margin: 5%;
+    /* margin: 5%; */
     padding: 5%;
     display: grid;
     grid-template-columns: calc(50% - 15px) 50%;
-    grid-template-rows: 30vh 20vh 30vh;
+    grid-template-rows: 27vh 27vh 27vh;
     grid-template-areas: "air-content   water-content" "light-content  alert-content" "   p        control-content";
-    grid-gap: 10px 15px;
+    grid-gap: 10px;
+  }
+
+  #dash > div {
+    border: 2px solid gray;
   }
 
   /* #topNav {
@@ -171,21 +95,23 @@
   }
 
   #air-container {
-    position: relative;
+    /* position: relative; */
     float: right;
-    overflow: hidden;
+    /* overflow: hidden; */
+    padding-right: 5%;
+    
   }
 
   #air-img-box>img {
-    position: relative;
+    /* position: relative; */
     float: left;
     /* padding-left: 50px; */
-    /* margin-left: 5%; */
+    padding-left: 5%;
   }
 
   .info-text {
-    /* margin-right: 5%;
-      padding-top: 70%; */
+    /* margin-right: 5%; */
+    /*  padding-top: 70%; */
     font-weight: bold;
     font-size: 2.9em;
   }
@@ -212,7 +138,11 @@
     color: #f5f7fa
   }
 
-  #water-img-box {}
+  #water-img-box {
+    float: left;
+    padding-left: 5%;
+    padding-top: 5%;
+  }
 
   #light-content {
     background: #FFB75E;
@@ -226,8 +156,21 @@
     color: #f5f7fa
   }
 
+  #light-img-box {
+    float: left;
+    padding-left: 5%;
+    padding-top: 8%;
+  }
+
+  #light-text {
+    float: right;
+    padding-right: 8%;
+    padding-top: 5%;
+    font-size: 2.5em;
+  }
+
   #alert-content {
-    background-color: yellow;
+    background-color: rgb(2, 193, 223);
     grid-area: alert-content;
     border-radius: 2px;
     color: #f5f7fa
@@ -240,6 +183,19 @@
     height: 75%;
     margin: 5% auto;
     border-radius: 8px;
+  }
+
+  #pump-img-box {
+    float: left;
+    padding-left: 5%;
+    padding-top: 8%;
+  }
+
+  #pump-text {
+    float: right;
+    padding-right: 5%;
+    padding-top: 8%;
+    font-size: 2.2em;
   }
 
   #p {
@@ -264,3 +220,22 @@
   }
 
   /* } */
+
+@media screen and (max-width: 600px) {
+  #dash {
+    margin: auto;
+    padding: 5%;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: repeat(6, 25vh);
+    grid-template-areas: 
+              "air-content"
+              "water-content" 
+              "light-content"
+              "alert-content"
+              "   p   "
+              "control-content";
+    grid-gap: 10px;
+  }
+
+}

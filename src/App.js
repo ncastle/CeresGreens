@@ -2,6 +2,14 @@ import React from 'react';
 // import logo from './logo.svg';
 import './App.css';
 import waterpump from './imgs/water-pump.svg';
+import waterpumpon from './imgs/water-pump-on.svg';
+import altwaterpump from './imgs/alt-water-pump.svg';
+import altwaterpumpoff from './imgs/alt-water-pump-off.svg';
+import wind from './imgs/wind.svg';
+import drop from './imgs/drop.svg';
+import dropborder from './imgs/drop_border.svg';
+import bulbOn from './imgs/bulb_on.svg';
+import bulbOff from './imgs/bulb_off.svg';
 
 const config = require('./config.js');
 // const fs = require('fs');
@@ -195,7 +203,7 @@ class App extends React.Component {
     console.log(this.state.lights)
     let pumpStatus = "OFF";
     if (this.state.waterPumps) pumpStatus = "ON";
-    let lightStatus = "OFF";
+    let lightStatus = "ON";
     if (this.state.lights) lightStatus = "ON";
     return (
       <div className="App">
@@ -203,6 +211,7 @@ class App extends React.Component {
           <h1>Ceres Greens</h1>
           <h2>Basildash</h2>
         </div>
+
         <div id="dash">
           {/* <div id="topNav">
             <ul id="navItems">
@@ -211,14 +220,15 @@ class App extends React.Component {
               <li>Light</li>
             </ul>
           </div> */}
+
           <div id="air-content">
             {/* <div className="label">Air:</div>  */}
             <div id="air-img-box">
-              <img src="/wi-day-windy.svg" width="100" height="100" alt="" />
+              <img src={wind} width="120px" height="120px" alt="" />
             </div>
             <div id="air-container">
               <div className="info-text">{this.state.airAvgs.temperature}&#176;C
-            <div className="label1">Temperature</div>
+              <div className="label1">Temperature</div>
               </div>
               <div className="info-text hum">{this.state.airAvgs.humidity}%
               <div className="label2">Humidity</div>
@@ -227,26 +237,56 @@ class App extends React.Component {
           </div>
           
           <div id="water-content">
-            Water Temp and Level:
             <div id="water-img-box">
-                <img src="/wi-humidity.svg" width="150" height="150" alt=""/>
+                <img src={drop} width="100px" height="100px" alt=""/>
             </div>
+            Water Temp and Level:
           </div>
+
           <div id="light-content">
-            Lights: <br/>
-            {lightStatus}
+            <div id="light-img-box">
+              { (lightStatus === "ON") &&
+                <img src={bulbOn} width="100px" height="100px" alt=""/>
+              }
+              { (lightStatus === "OFF") &&
+                <img src={bulbOff} width="100px" height="100px" alt=""/>
+              }
             </div>
-          <div id="control-content">Control</div>
-          <div id="alert-content">
-            <img src={waterpump} width='150px' height="150px" alt="water pump svg"/>
-            Water Pump Status: <br/>{pumpStatus}
+            <div id="light-text">
+              <strong>Light</strong>
+              <br/>
+              <strong>Status:</strong>
+              <br/>
+              {lightStatus}
+            </div>
           </div>
+
+          <div id="control-content">Control</div>
+
+          <div id="alert-content">
+            <div id="pump-img-box">
+              {/* <img src={waterpump} width="100px" height="100px" alt="water pump svg"/> */}
+              { (pumpStatus === "ON") &&
+                <img id="pumpon" src={altwaterpump} width="100px" height="100px" alt=""/>
+              }
+              { (pumpStatus === "OFF") &&
+                <img src={altwaterpumpoff} width="100px" height="100px" alt=""/>
+              }
+            </div>
+            <div id="pump-text">
+              <strong>Water Pump</strong>
+              <br/>
+              <strong>Status:</strong>
+              <br/>
+              {pumpStatus}
+            </div>
+          </div>
+
           <div id="p">
             Alert Log:
-            <div id="alert-box">
-
-            </div>
+            <div id="alert-box"></div>
           </div>
+
         </div>
       </div >
     );
