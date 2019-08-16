@@ -260,9 +260,7 @@ class App extends React.Component {
               }
             </div>
             <div id="light-text">
-              <strong>Light</strong>
-              <br/>
-              <strong>Status:</strong>
+              <strong>Lights</strong>
               <br/>
               {lightStatus}
             </div>
@@ -281,9 +279,9 @@ class App extends React.Component {
               }
             </div>
             <div id="pump-text">
-              <strong>Water Pump</strong>
+              <strong>Water</strong>
               <br/>
-              <strong>Status:</strong>
+              <strong>Pumps</strong>
               <br/>
               {pumpStatus}
             </div>

@@ -1,8 +1,8 @@
   /* ------------------------------------------- */
 
-  /* COLOR PALETTE */
+                /* COLOR PALETTE */
 
-  /* ------------------------------------------- 
+  /* -------------------------------------------
   BLUE => #1E3F6C 
   RED => #ED553E
   YELLOW => #FDCD30
@@ -36,7 +36,7 @@
 
   /* ------------------------------------------- */
 
-  /* Desktop */
+                  /* Desktop */
 
   /* ------------------------------------------- */
 
@@ -108,16 +108,9 @@
     
   }
 
-  #air-img-box>img {
-    /* position: relative; */
-    /* float: left; */
-    /* padding-left: 50px; */
-    /* padding-left: 5%; */
-  }
+  #air-img-box>img {}
 
   .info-text {
-    /* margin-right: 5%; */
-    /*  padding-top: 70%; */
     font-weight: bold;
     font-size: 2.9em;
   }
@@ -147,11 +140,7 @@
     color: #f5f7fa
   }
 
-  #water-img-box {
-    /* float: left;
-    padding-left: 5%;
-    padding-top: 5%; */
-  }
+  #water-img-box {}
 
   #light-content {
     display: flex;
@@ -168,16 +157,9 @@
     color: #f5f7fa
   }
 
-  #light-img-box {
-    /* float: left;
-    padding-left: 5%;
-    padding-top: 8%; */
-  }
+  #light-img-box {}
 
   #light-text {
-    /* float: right;
-    padding-right: 8%;
-    padding-top: 5%; */
     font-size: 2.5em;
   }
 
@@ -185,22 +167,15 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background-color: rgb(2, 193, 223);
+    background-color: #41BCEA;
     grid-area: pump-content;
     border-radius: 2px;
     color: #f5f7fa
   }
   
-  #pump-img-box {
-    /* float: left;
-    padding-left: 5%;
-    padding-top: 8%; */
-  }
+  #pump-img-box {}
 
   #pump-text {
-    /* float: right;
-    padding-right: 5%;
-    padding-top: 8%; */
     font-size: 2.2em;
   }
 
@@ -234,7 +209,7 @@
     align-self: start;
   }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 748px) {
   #dash {
     margin: auto;
     padding: 5%;
@@ -249,6 +224,9 @@
               "alert-content"
               "control-content";
     grid-gap: 10px;
+  }
+  .info-text {
+    font-size: 2.3em;
   }
 
 }
