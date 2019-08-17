@@ -11,6 +11,7 @@ import dropborder from './imgs/drop_border.svg';
 import bulbOn from './imgs/bulb_on.svg';
 import bulbOff from './imgs/bulb_off.svg';
 import logo from './imgs/CG_Logo_Horizontal_Color_a.png';
+import Chart from './Chart';
 
 const config = require('./config.js');
 // const fs = require('fs');
@@ -18,10 +19,13 @@ const config = require('./config.js');
 const Influx = require('influx');
 
 
+
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      page: "dashboard",
+      influxdb: null,
       installationId: config.installationId,
       airAvgs: {
         humidity: null,
@@ -70,11 +74,13 @@ class App extends React.Component {
       ],
       lights: undefined, // boolean -- "on" or "off"
       waterPumps: undefined, // boolean -- "on" or "off"
-      currentDate: undefined
+      currentDate: undefined,
+      timeSeriesData: [],
     }
     this.openmoticsLogin = this.openmoticsLogin.bind(this);
     this.getOMSensorInfo = this.getOMSensorInfo.bind(this);
     this.cToF = this.cToF.bind(this);
+    this.getChartData = this.getChartData.bind(this);
   }
 
   async componentDidMount() {
@@ -91,7 +97,7 @@ class App extends React.Component {
     // await this.getOMSensorInfo(token, 1);
     // await this.getOMSensorInfo(token, 2);
 
-    // fetch outputs
+    // fetch outputs 
     await fetch('/proxy/api/v1/base/installations/215/outputs', {
       headers: {
         'Content-Type': 'application/json',
@@ -117,6 +123,8 @@ class App extends React.Component {
 
     // testing querying the influx database
     const influxdb = new Influx.InfluxDB(`https://${config.dbusername}:${config.dbpassword}@gigawatt-dbd9c7a7.influxcloud.net:8086/openmotics`);
+
+    this.setState({influxdb});
 
     console.log('connected to database?');
     influxdb.getDatabaseNames()
@@ -146,7 +154,7 @@ class App extends React.Component {
     // query influxdb for status of pumps
     queryResults = await influxdb.query(`SELECT last("value") AS "last_value" 
                     FROM "openmotics"."autogen"."output" 
-                    WHERE ("id"='5' OR "id"='6' OR "id"='7')`)
+                    WHERE ("id"='5' OR "id"='6' OR "id"='7')`);
     console.log(queryResults[0]);
     status = true;
     if (queryResults[0].last_value === 0) status = false;
@@ -159,6 +167,37 @@ class App extends React.Component {
     this.setState({ outputs });
     this.setState({ waterPumps: status });
     console.log(this.state);
+
+    
+
+
+  } // end componentDidMount
+
+  async getChartData(property) {
+
+    const influxdb = new Influx.InfluxDB(`https://${config.dbusername}:${config.dbpassword}@gigawatt-dbd9c7a7.influxcloud.net:8086/openmotics`);
+
+    // fetch time series data from influxdb
+    let queryResults = await influxdb.query(`SELECT mean("${property}") AS "mean_${property}"
+                      FROM "openmotics"."autogen"."sensor"
+                      WHERE time > now() - 5d AND ("id"='2' OR "id"='1' OR "id"='0')
+                      GROUP BY time(30m) FILL(null)`);
+    console.log({"time series query": queryResults});
+    let seriesData = [];
+    if(property === 'temp') {
+      queryResults.forEach(result => {
+        seriesData.push({t: result.time,
+                          y: this.cToF(result.mean_temp)});
+      });
+    }
+    if (property === 'hum') {
+      queryResults.forEach(result => {
+        seriesData.push({t: result.time,
+                          y: result.mean_hum});
+      });
+    }
+    console.log(seriesData);
+    return seriesData;
   }
 
   // function takes a username and password for openmotics, logs in,
@@ -208,7 +247,9 @@ class App extends React.Component {
       });
   }
 
-  cToF(celsius) {
+  // helper function to convert temperature 
+  // readings from celsius to fahrenheit
+  cToF(celsius) { 
     return celsius * 9 / 5 + 32;
   }
 
@@ -217,99 +258,118 @@ class App extends React.Component {
     console.log(this.state.lights)
     let pumpStatus = "OFF";
     if (this.state.waterPumps) pumpStatus = "ON";
-    let lightStatus = "ON";
-    // if (this.state.lights) lightStatus = "ON";
-    return (
-      <div className="App">
-        <div id="header">
-          <img src={logo} width='205px' height='100px' alt='' />
-          <h2>basilDash</h2>
+    let lightStatus = "OFF";
+    if (this.state.lights) lightStatus = "ON";
+    
+    if(this.state.page === "dashboard") {
+      return (
+        <div className="App">
+          <div id="header">
+            <img src={logo} width='205px' height='100px' alt='' />
+            <h2>basilDash</h2>
+          </div>
+          <div id="date">{this.state.currentDate}</div>
+          <button type="button" onClick={() => this.setState({page: "details"})}>Go to Details</button>
+
+          <div id="dash">
+            {/* <div id="topNav">
+              <ul id="navItems">
+                <li>Air</li>
+                <li>Water</li>
+                <li>Light</li>
+              </ul>
+            </div> */}
+
+            <div id="air-content">
+              {/* <div className="label">Air:</div>  */}
+              <div id="air-img-box">
+                <img src={wind} width="120px" height="120px" alt="" />
+              </div>
+              <div id="air-container">
+                <div className="data">{this.state.airAvgs.temperature}&#176;F
+                  <div className="label">Temperature</div>
+                </div>
+                <div className="data secondary">{this.state.airAvgs.humidity}%
+                  <div className="label">Humidity</div>
+                </div>
+              </div>
+            </div>
+            
+            <div id="water-content">
+              <div id="water-img-box">
+                  <img src={dropborder} width="120px" height="120px" alt=""/>
+              </div>
+              <div id="water-container">
+                <div className="data">15&#176;C
+                  <div className="label">Temperature</div>
+                </div>
+                <div className="data secondary"> -1
+                  <div className="label">Level</div>
+                </div>
+              </div>
+            </div>
+
+            <div id="light-content">
+              <div id="light-img-box">
+                { (lightStatus === "ON") &&
+                  <img src={bulbOn} width="120px" height="120px" alt=""/>
+                }
+                { (lightStatus === "OFF") &&
+                  <img src={bulbOff} width="120px" height="120px" alt=""/>
+                }
+              </div>
+              <div id="light-text">
+                <strong>Lights</strong>
+                <br/>
+                {lightStatus}
+              </div>
+            </div>
+
+            <div id="pump-content">
+              <div id="pump-img-box">
+                {/* <img src={waterpump} width="100px" height="100px" alt="water pump svg"/> */}
+                { (pumpStatus === "ON") &&
+                  <img id="pumpon" src={altwaterpump} width="100px" height="100px" alt=""/>
+                }
+                { (pumpStatus === "OFF") &&
+                  <img src={altwaterpumpoff} width="100px" height="100px" alt=""/>
+                }
+              </div>
+              <div id="pump-text">
+                <strong>Water</strong>
+                <br/>
+                <strong>Pumps</strong>
+                <br/>
+                {pumpStatus}
+              </div>
+            </div>
+
+            <div id="alert-content">
+              Alert Log:
+              <div id="alert-box"></div>
+            </div>
+
+            <div id="control-content">Control</div>
+          </div>
+        </div >
+      );
+    } else if (this.state.page === "details") {
+      return (
+        <div className="detail-page">
+          <div id="header">
+          <img src={logo} width='205px' height='100px' alt='' />  
+            <h2>basilDeets</h2>
+          </div>
+          <div id="date">{this.state.currentDate}</div>
+          <button type="button" onClick={() => this.setState({page: "dashboard"})}>Go to Dashboard</button>
+
+          <Chart getChartData={this.getChartData}/>
+          
         </div>
-        <div id="date">{this.state.currentDate}</div>
 
-        <div id="dash">
-          {/* <div id="topNav">
-            <ul id="navItems">
-              <li>Air</li>
-              <li>Water</li>
-              <li>Light</li>
-            </ul>
-          </div> */}
 
-          <div id="air-content">
-            {/* <div className="label">Air:</div>  */}
-            <div id="air-img-box">
-              <img src={wind} width="120px" height="120px" alt="" />
-            </div>
-            <div id="air-container">
-              <div className="info-text">{this.state.airAvgs.temperature}&#176;F
-              <div className="label1">Temperature</div>
-              </div>
-              <div className="info-text hum">{this.state.airAvgs.humidity}%
-              <div className="label2">Humidity</div>
-              </div>
-            </div>
-          </div>
-
-          <div id="water-content">
-            <div id="water-img-box">
-              <img src={dropborder} width="120px" height="120px" alt="" />
-            </div>
-            <div id="water-container">
-              <div className="info-text">15&#176;C
-              <div className="label1">Temperature</div>
-              </div>
-              <div className="info-text hum"> -1
-              <div className="label2">Level</div>
-              </div>
-            </div>
-          </div>
-
-          <div id="light-content">
-            <div id="light-img-box">
-              {(lightStatus === "ON") &&
-                <img src={bulbOn} width="120px" height="120px" alt="" />
-              }
-              {(lightStatus === "OFF") &&
-                <img src={bulbOff} width="120px" height="120px" alt="" />
-              }
-            </div>
-            <div id="light-text">
-              <strong>Lights</strong>
-              <br />
-              {lightStatus}
-            </div>
-          </div>
-
-          <div id="control-content">Control</div>
-
-          <div id="pump-content">
-            <div id="pump-img-box">
-              {/* <img src={waterpump} width="100px" height="100px" alt="water pump svg"/> */}
-              {(pumpStatus === "ON") &&
-                <img id="pumpon" src={altwaterpump} width="100px" height="100px" alt="" />
-              }
-              {(pumpStatus === "OFF") &&
-                <img src={altwaterpumpoff} width="100px" height="100px" alt="" />
-              }
-            </div>
-            <div id="pump-text">
-              <strong>Water</strong>
-              <br />
-              <strong>Pumps</strong>
-              <br />
-              {pumpStatus}
-            </div>
-          </div>
-
-          <div id="alert-content">
-            Alert Log:
-            <div id="alert-box"></div>
-          </div>
-
-        </div>
-      </div >
-    );
+      );
+    }
   }
 }
 

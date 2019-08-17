@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "chart.js": "^2.8.0",
     "express-http-proxy": "^1.5.1",
     "influx": "^5.4.0",
     "morgan": "^1.9.1",
