@@ -10,6 +10,7 @@ import drop from './imgs/drop.svg';
 import dropborder from './imgs/drop_border.svg';
 import bulbOn from './imgs/bulb_on.svg';
 import bulbOff from './imgs/bulb_off.svg';
+import logo from './imgs/CG_Logo_Horizontal_Color_a.png';
 
 const config = require('./config.js');
 // const fs = require('fs');
@@ -69,6 +70,7 @@ class App extends React.Component {
       ],
       lights: undefined, // boolean -- "on" or "off"
       waterPumps: undefined, // boolean -- "on" or "off"
+      currentDate: undefined
     }
     this.openmoticsLogin = this.openmoticsLogin.bind(this);
     this.getOMSensorInfo = this.getOMSensorInfo.bind(this);
@@ -102,6 +104,13 @@ class App extends React.Component {
         console.log(json);
       });
 
+
+    let date = new Date().getDate();
+    let month = new Date().getMonth() + 1;
+    let year = new Date().getFullYear();
+    this.setState({ currentDate: month + "/" + date + "/" + year })
+
+
     /*** InfluxDB ***/
 
     // url to database: https://gigawatt-dbd9c7a7.influxcloud.net:8086
@@ -122,7 +131,7 @@ class App extends React.Component {
     const { airAvgs } = this.state;
     airAvgs.temperature = this.cToF(queryResults[0].mean_temp).toFixed(2);
     airAvgs.humidity = queryResults[0].mean_hum.toFixed(2);
-    this.setState({airAvgs});
+    this.setState({ airAvgs });
 
     // query influxdb for status of lights
     queryResults = await influxdb.query(`SELECT last("value") AS "last_value" 
@@ -131,7 +140,7 @@ class App extends React.Component {
     console.log(queryResults);
     let status = true;
     if (queryResults[0].last_value === 0) status = false;
-    this.setState({lights: status});
+    this.setState({ lights: status });
 
 
     // query influxdb for status of pumps
@@ -147,8 +156,8 @@ class App extends React.Component {
     } else {
       outputs.forEach(output => output.on = false);
     }
-    this.setState({outputs});
-    this.setState({waterPumps: status});
+    this.setState({ outputs });
+    this.setState({ waterPumps: status });
     console.log(this.state);
   }
 
@@ -186,20 +195,20 @@ class App extends React.Component {
         'Authorization': `Bearer ${token}`
       }
     })
-    .then(response => response.json())
-    .then(json => {
-      console.log(json)
-      console.log({'sensor humidity': json.data.status.humidity}, {'sensor temperature': json.data.status.temperature});
-      console.log(this.state);
-      const { airAvgs } = this.state
-      airAvgs.humidity = json.data.status.humidity
-      airAvgs.temperature = json.data.status.temperature
-      this.setState({ airAvgs });
-      console.log('state set: ', this.state);
-    });
+      .then(response => response.json())
+      .then(json => {
+        console.log(json)
+        console.log({ 'sensor humidity': json.data.status.humidity }, { 'sensor temperature': json.data.status.temperature });
+        console.log(this.state);
+        const { airAvgs } = this.state
+        airAvgs.humidity = json.data.status.humidity
+        airAvgs.temperature = json.data.status.temperature
+        this.setState({ airAvgs });
+        console.log('state set: ', this.state);
+      });
   }
 
-  cToF(celsius) { 
+  cToF(celsius) {
     return celsius * 9 / 5 + 32;
   }
 
@@ -213,9 +222,10 @@ class App extends React.Component {
     return (
       <div className="App">
         <div id="header">
-          <h1>Ceres Greens</h1>
-          <h2>Basildash</h2>
+          <img src={logo} width='205px' height='100px' alt='' />
+          <h2>basilDash</h2>
         </div>
+        <div id="date">{this.state.currentDate}</div>
 
         <div id="dash">
           {/* <div id="topNav">
@@ -240,10 +250,10 @@ class App extends React.Component {
               </div>
             </div>
           </div>
-          
+
           <div id="water-content">
             <div id="water-img-box">
-                <img src={dropborder} width="120px" height="120px" alt=""/>
+              <img src={dropborder} width="120px" height="120px" alt="" />
             </div>
             <div id="water-container">
               <div className="info-text">15&#176;C
@@ -257,16 +267,16 @@ class App extends React.Component {
 
           <div id="light-content">
             <div id="light-img-box">
-              { (lightStatus === "ON") &&
-                <img src={bulbOn} width="120px" height="120px" alt=""/>
+              {(lightStatus === "ON") &&
+                <img src={bulbOn} width="120px" height="120px" alt="" />
               }
-              { (lightStatus === "OFF") &&
-                <img src={bulbOff} width="120px" height="120px" alt=""/>
+              {(lightStatus === "OFF") &&
+                <img src={bulbOff} width="120px" height="120px" alt="" />
               }
             </div>
             <div id="light-text">
               <strong>Lights</strong>
-              <br/>
+              <br />
               {lightStatus}
             </div>
           </div>
@@ -276,18 +286,18 @@ class App extends React.Component {
           <div id="pump-content">
             <div id="pump-img-box">
               {/* <img src={waterpump} width="100px" height="100px" alt="water pump svg"/> */}
-              { (pumpStatus === "ON") &&
-                <img id="pumpon" src={altwaterpump} width="100px" height="100px" alt=""/>
+              {(pumpStatus === "ON") &&
+                <img id="pumpon" src={altwaterpump} width="100px" height="100px" alt="" />
               }
-              { (pumpStatus === "OFF") &&
-                <img src={altwaterpumpoff} width="100px" height="100px" alt=""/>
+              {(pumpStatus === "OFF") &&
+                <img src={altwaterpumpoff} width="100px" height="100px" alt="" />
               }
             </div>
             <div id="pump-text">
               <strong>Water</strong>
-              <br/>
+              <br />
               <strong>Pumps</strong>
-              <br/>
+              <br />
               {pumpStatus}
             </div>
           </div>
