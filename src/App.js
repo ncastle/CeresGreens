@@ -1,17 +1,10 @@
 import React from 'react';
 // import logo from './logo.svg';
 import './App.css';
-import waterpump from './imgs/water-pump.svg';
-import waterpumpon from './imgs/water-pump-on.svg';
-import altwaterpump from './imgs/alt-water-pump.svg';
-import altwaterpumpoff from './imgs/alt-water-pump-off.svg';
-import wind from './imgs/wind.svg';
-import drop from './imgs/drop.svg';
-import dropborder from './imgs/drop_border.svg';
-import bulbOn from './imgs/bulb_on.svg';
-import bulbOff from './imgs/bulb_off.svg';
+
 import logo from './imgs/CG_Logo_Horizontal_Color_a.png';
 import Chart from './Chart';
+import Dashboard from './Dashboard';
 
 const config = require('./config.js');
 // const fs = require('fs');
@@ -168,10 +161,11 @@ class App extends React.Component {
     this.setState({ waterPumps: status });
     console.log(this.state);
 
-    
-
-
   } // end componentDidMount
+
+  async componentDidUpdate () {
+    
+  }
 
   async getChartData(property) {
 
@@ -265,103 +259,39 @@ class App extends React.Component {
       return (
         <div className="App">
           <div id="header">
-            <img src={logo} width='205px' height='100px' alt='' />
+            <img id="logo" src={logo} alt='' />
             <h2>basilDash</h2>
+            <div id="date">{this.state.currentDate}</div>
           </div>
-          <div id="date">{this.state.currentDate}</div>
-          <button type="button" onClick={() => this.setState({page: "details"})}>Go to Details</button>
-
-          <div id="dash">
-            {/* <div id="topNav">
-              <ul id="navItems">
-                <li>Air</li>
-                <li>Water</li>
-                <li>Light</li>
-              </ul>
-            </div> */}
-
-            <div id="air-content">
-              {/* <div className="label">Air:</div>  */}
-              <div id="air-img-box">
-                <img src={wind} width="120px" height="120px" alt="" />
-              </div>
-              <div id="air-container">
-                <div className="data">{this.state.airAvgs.temperature}&#176;F
-                  <div className="label">Temperature</div>
-                </div>
-                <div className="data secondary">{this.state.airAvgs.humidity}%
-                  <div className="label">Humidity</div>
-                </div>
-              </div>
-            </div>
-            
-            <div id="water-content">
-              <div id="water-img-box">
-                  <img src={dropborder} width="120px" height="120px" alt=""/>
-              </div>
-              <div id="water-container">
-                <div className="data">15&#176;C
-                  <div className="label">Temperature</div>
-                </div>
-                <div className="data secondary"> -1
-                  <div className="label">Level</div>
-                </div>
-              </div>
-            </div>
-
-            <div id="light-content">
-              <div id="light-img-box">
-                { (lightStatus === "ON") &&
-                  <img src={bulbOn} width="120px" height="120px" alt=""/>
-                }
-                { (lightStatus === "OFF") &&
-                  <img src={bulbOff} width="120px" height="120px" alt=""/>
-                }
-              </div>
-              <div id="light-text">
-                <strong>Lights</strong>
-                <br/>
-                {lightStatus}
-              </div>
-            </div>
-
-            <div id="pump-content">
-              <div id="pump-img-box">
-                {/* <img src={waterpump} width="100px" height="100px" alt="water pump svg"/> */}
-                { (pumpStatus === "ON") &&
-                  <img id="pumpon" src={altwaterpump} width="100px" height="100px" alt=""/>
-                }
-                { (pumpStatus === "OFF") &&
-                  <img src={altwaterpumpoff} width="100px" height="100px" alt=""/>
-                }
-              </div>
-              <div id="pump-text">
-                <strong>Water</strong>
-                <br/>
-                <strong>Pumps</strong>
-                <br/>
-                {pumpStatus}
-              </div>
-            </div>
-
-            <div id="alert-content">
-              Alert Log:
-              <div id="alert-box"></div>
-            </div>
-
-            <div id="control-content">Control</div>
+          
+          <div id="nav">
+            <p>Welcome Message</p>
+            <label className="switch">
+              <input type="checkbox" onClick={() => this.setState({page: "details"})}/>
+              <span className="slider round"/>
+            </label>
           </div>
+
+          <Dashboard lightStatus={lightStatus} pumpStatus={pumpStatus} 
+                      airAvgs={this.state.airAvgs} />
         </div >
       );
     } else if (this.state.page === "details") {
       return (
         <div className="detail-page">
           <div id="header">
-          <img src={logo} width='205px' height='100px' alt='' />  
-            <h2>basilDeets</h2>
+            <img id="logo" src={logo} alt='' />
+            <h2>basilDash</h2>
+            <div id="date">{this.state.currentDate}</div>
           </div>
-          <div id="date">{this.state.currentDate}</div>
-          <button type="button" onClick={() => this.setState({page: "dashboard"})}>Go to Dashboard</button>
+          <div id="nav">
+            <p>Welcome Message</p>
+            
+            <label className="switch">
+              <input type="checkbox" checked onClick={() => this.setState({page: "dashboard"})}/>
+              <span className="slider round"/>
+            </label>
+          </div>
 
           <Chart getChartData={this.getChartData}/>
           
