@@ -30,46 +30,20 @@ class Chart extends React.Component {
             'rgba(255, 99, 132, 1)',
           ],
           borderWidth: 2
-        }]
-      },
-      options: {
-        legend: {
-          labels: {
-            fontSize: 15,
-          }
         },
-        scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: false
-            }
-          }],
-          xAxes: [{
-            type: 'time',
-            time: {
-              unit: 'day'
-            }
-          }]
-        }
-      }
-    });
-    var humctx = document.getElementById('humChart');
-    // chart for air humidity readings
-    var humChart = new Chartjs(humctx, {
-      type: 'line',
-      data: {
-        // labels: ['time series data'],
-        datasets: [{
+        {
           label: 'HUMIDITY',
           data: humData,
           backgroundColor: [
-            'rgba(34, 139, 255, 0.3)',
+            'rgba(234, 139, 0, 0.3)',
           ],
           borderColor: [
             'rgba(255, 99, 132, 1)',
           ],
           borderWidth: 2
-        }]
+        }
+      
+      ]
       },
       options: {
         legend: {
@@ -92,6 +66,45 @@ class Chart extends React.Component {
         }
       }
     });
+    // var humctx = document.getElementById('humChart');
+    // // chart for air humidity readings
+    // var humChart = new Chartjs(humctx, {
+    //   type: 'line',
+    //   data: {
+    //     // labels: ['time series data'],
+    //     datasets: [{
+    //       label: 'HUMIDITY',
+    //       data: humData,
+    //       backgroundColor: [
+    //         'rgba(34, 139, 255, 0.3)',
+    //       ],
+    //       borderColor: [
+    //         'rgba(255, 99, 132, 1)',
+    //       ],
+    //       borderWidth: 2
+    //     }]
+    //   },
+    //   options: {
+    //     legend: {
+    //       labels: {
+    //         fontSize: 15,
+    //       }
+    //     },
+    //     scales: {
+    //       yAxes: [{
+    //         ticks: {
+    //           beginAtZero: false
+    //         }
+    //       }],
+    //       xAxes: [{
+    //         type: 'time',
+    //         time: {
+    //           unit: 'day'
+    //         }
+    //       }]
+    //     }
+    //   }
+    // });
 
   }
 
@@ -103,9 +116,9 @@ class Chart extends React.Component {
         <div className="chart-container">
           <canvas id="tempChart"></canvas>
         </div>
-        <div className="chart-container">
+        {/* <div className="chart-container">
         <canvas id="humChart"></canvas>
-        </div>
+        </div> */}
       </div>
     );
   }

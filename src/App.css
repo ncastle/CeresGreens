@@ -27,7 +27,7 @@
   .detail-page {
     text-align: center;
     font-family: "Quicksand";
-    background-color: white;
+    /* background-color: white; */
   }
   /* body {
     height: 100vh;
@@ -37,17 +37,22 @@
     background-image: linear-gradient(rgba(0, 0, 0, 0.3), #000), url(./imgs/basil-blur-close-up-1391505.jpg);
     background-size: cover;
     background-position: center;
+    background-repeat: repeat-x;
     height: 100vh;
   }
 
   .chart-container {
     position: relative;
-    width: 45vw;
+    width: 55vw;
   }
 
   #chart-wrapper {
-    display: flex;
-    justify-content: space-evenly
+    border: 6px solid slategray;
+    background-color: white;
+    border-radius: 3px;
+    padding: 3%;
+    width: fit-content;
+    margin: 5% auto 0 auto;
   }
 
   /* ------------------------------------------- */
@@ -361,7 +366,7 @@
 
   @media screen and (max-width: 748px) {
     #root {
-      height: fit-content;
+      /* height: fit-content; */
     }
     #dash {
       margin: auto;
@@ -384,17 +389,14 @@
     }
 
     #chart-wrapper {
-      flex-direction: column;
-      align-items: center;
-      /* justify-content: space-evenly; */
-      /* height: 90vh; */
+      /* margin-bottom: 48%; */
     }
 
     .chart-container {
-      width: 90vw;
-      margin-top: 10%;
-      border: 1px solid green;
-      padding: 5%;
+      width: 80vw;
+      margin-top: 5%;
+      /* border: 6px solid slategray; */
+      padding: 3%;
     }
 
     #date {
