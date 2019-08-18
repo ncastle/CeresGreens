@@ -16,7 +16,6 @@ class Dashboard extends React.Component {
   }
 
   async componentDidMount() {
-
     // fetch information
   }
 
@@ -25,6 +24,7 @@ class Dashboard extends React.Component {
   }
 
   render() {
+    console.log({'message props':this.props.messages});
     return (
       <div id="dash">
         {/* <div id="topNav">
@@ -55,10 +55,10 @@ class Dashboard extends React.Component {
               <img src={dropborder} width="120px" height="120px" alt=""/>
           </div>
           <div id="water-container">
-            <div className="data">65&#176;F
+            <div className="data">{this.props.waterAvgs.temperature}&#176;F
               <div className="label">Temperature</div>
             </div>
-            <div className="data secondary"> -1
+            <div className="data secondary"> {this.props.waterAvgs.level}
               <div className="label">Level</div>
             </div>
           </div>
@@ -101,10 +101,26 @@ class Dashboard extends React.Component {
 
         <div id="alert-content">
           Alert Log:
-          <div id="alert-box"></div>
+          <div id="alert-box">
+            <ul id="message-list">
+              {this.props.messages &&
+                this.props.messages.map((message, index) => {
+                  let messageClass = 'okay';
+                  if(message.includes('Warning')) {
+                    messageClass = 'warning';
+                  }
+                  if(message.includes('ALERT')) {
+                    messageClass = 'alert';
+                  }
+                  return(
+                    <li className={messageClass} key={index}>{message}</li>
+                  );
+              })}
+            </ul>
+          </div>
         </div>
 
-        <div id="control-content">Control</div>
+        {/* <div id="control-content">Control</div> */}
       </div>);
   }
 }
