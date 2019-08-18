@@ -55,7 +55,7 @@ class Dashboard extends React.Component {
               <img src={dropborder} width="120px" height="120px" alt=""/>
           </div>
           <div id="water-container">
-            <div className="data">15&#176;C
+            <div className="data">65&#176;F
               <div className="label">Temperature</div>
             </div>
             <div className="data secondary"> -1

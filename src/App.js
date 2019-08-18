@@ -142,8 +142,8 @@ class App extends React.Component {
 
     console.log(queryResults[0]);
     const { airAvgs } = this.state;
-    airAvgs.temperature = this.cToF(queryResults[0].mean_temp).toFixed(5);
-    airAvgs.humidity = queryResults[0].mean_hum.toFixed(3);
+    airAvgs.temperature = this.cToF(queryResults[0].mean_temp).toFixed(1);
+    airAvgs.humidity = queryResults[0].mean_hum.toFixed(1);
     this.setState({ airAvgs });
 
     // query influxdb for status of lights
