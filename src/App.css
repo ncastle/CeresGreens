@@ -29,12 +29,15 @@
     font-family: "Quicksand";
     background-color: white;
   }
-
+  /* body {
+    height: 100vh;
+  } */
   #root {
+    position: relative;
     background-image: linear-gradient(rgba(0, 0, 0, 0.3), #000), url(./imgs/basil-blur-close-up-1391505.jpg);
     background-size: cover;
     background-position: center;
-    height: 100%;
+    height: 100vh;
   }
 
   .chart-container {
@@ -69,23 +72,28 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    min-height: 8vh;
   }
 
   #header h2 {}
 
   #logo {
-    height: 100px;
-    width: 205px;
+    height: 80px;
+    width: 200px;
     margin-left: 5vw;
   }
 
   #dash {
     /* margin: 5%; */
-    padding: 3%;
+    padding-right: 3%;
+    padding-left: 3%;
     display: grid;
-    grid-template-columns: calc(50% - 15px) 50%;
-    grid-template-rows: 27vh 27vh 27vh 27vh;
-    grid-template-areas: "air-content   water-content""light-content  pump-content""alert-content control-content";
+    grid-template-columns: 50%;
+    grid-template-rows: 27vh 20vh 35vh;
+    grid-template-areas: 
+          "air-content   water-content"
+          "light-content  pump-content"
+          "alert-content alert-content";
     grid-gap: 10px;
   }
 
@@ -100,9 +108,14 @@
   }
 
   #nav {
+    font-weight: bold;
+    letter-spacing: 1px;
     display: flex;
     justify-content: space-around;
     font-size: 1.5em;
+    min-height: 2vh;
+    padding: 5px;
+    background-color: rgba(192, 192, 192, 0.35);
   }
 
   button {
@@ -281,7 +294,7 @@
     grid-area: alert-content;
     border-radius: 2px;
     color: #f5f7fa;
-    transition: background-color 0.5s ease
+    transition: background-color 0.5s ease;
   }
 
   #alert-content:hover {
@@ -289,12 +302,35 @@
   }
 
   #alert-box {
-    border: 3px solid black;
-    background-color: rgba(211, 211, 211, 0.65);
+    border: 3px solid green;
+    background-color: rgba(220, 220, 220, 0.70);
     width: 75%;
     height: 75%;
-    margin: 5% auto;
+    margin: 1% auto;
     border-radius: 8px;
+  }
+  #message-list{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    list-style-type: none;
+    font-size: 1.5em;
+    font-weight: bold;
+    letter-spacing: 1px;
+    justify-content: space-around;
+  }
+
+  #message-list li {
+    margin-top: 5px;
+  }
+  .warning {
+    color: rgb(255, 227, 100);
+  }
+  .alert {
+    color: rgb(200, 0, 0);
+  }
+  .okay {
+    color: rgb(0, 200, 0);
   }
 
   #control-content {
@@ -324,6 +360,9 @@
   } */
 
   @media screen and (max-width: 748px) {
+    #root {
+      height: fit-content;
+    }
     #dash {
       margin: auto;
       padding: 5%;
@@ -336,7 +375,7 @@
         "light-content"
         "pump-content"
         "alert-content"
-        "control-content";
+        "alert-content";
       grid-gap: 10px;
     }
 
@@ -371,6 +410,32 @@
       font-size: 20px;
     }
 
+    #message-list {
+      font-size: 1em;
+      padding: 0 5px;
+    }
+    #alert-box {
+      margin-top: 10%;
+    }
+    #nav {
+      align-items: center;
+      font-size: 1em;
+    }
+    .switch {
+      width: 40px;
+      height: 22px;
+    }
+    .slider:before {
+      width: 16px;
+      height: 16px;
+      left: 3px;
+      bottom: 3px;
+    }
+    input:checked + .slider:before {
+      -webkit-transform: translateX(18px);
+      -ms-transform: translateX(18px);
+      transform: translateX(18px);
+    }
   }
 
   @media screen and (min-width: 1024px) {

@@ -25,8 +25,8 @@ class App extends React.Component {
         temperature: null
       },
       waterAvgs: {
-        level: null,
-        temperature: null
+        level: -1,    // placeholder value
+        temperature: 65,  //placeholder value
       },
       sensors: [
         {
@@ -69,11 +69,54 @@ class App extends React.Component {
       waterPumps: undefined, // boolean -- "on" or "off"
       currentDate: undefined,
       timeSeriesData: [],
+      messages: {
+        okay: {
+          air: {
+            temp: 'Air temperature okay!',
+            hum: 'Ait humidity okay!'
+          },
+          water: {
+            temp: 'Water temperature okay!',
+            level: 'Water level okay!'
+          }
+        },
+        warnings: {
+          air: {
+            highTemp: 'Warning: Air temperature is 72 or higher, consider turning cooling coil on',
+            lowTemp: 'Warning: Air temperature is 64 or lower, consider turning heating coil on',
+            highHum: 'Warning: Air humidity is 60% or higher, consider turning the dehumidifier on',
+            lowHum: 'Warning: Air humidity is 45% or lower, consider turning the dehumidifier off'
+          },
+          water: {
+            highTemp: 'Warning: Water temperature is 68 or higher, consider turning chiller on',
+            lowTemp: 'Warning: Water temperature is 64 or lower, consider turning chiller off',
+            highLevel: 'Warning: Water level is +1',
+            lowLevel: 'Warning: Water level is -1',
+          }
+        },
+        alerts: {
+          air: {
+            highTemp: '!!! ALERT: Air temperature is 80 or higher !!!',
+            lowTemp: '!!! ALERT: Air temperature is 60 or lower !!!',
+            highHum: '!!! ALERT: Air humidity is 65% or higher !!!',
+            lowHum: '!!! ALERT: Air humidity is 40% or lower !!!'
+          },
+          water: {
+            highTemp: '!!! ALERT: Water temperature is 68 or higher !!!',
+            lowTemp: '!!! ALERT: Water temperature is 60 or lower !!!',
+            highLevel: '!!! ALERT: Water level is +2 !!!',
+            lowLevel: '!!! ALERT: Water level is -2 !!!'
+          }
+        },
+        currentMessages: ['Loading Messages'],
+
+      }
     }
     this.openmoticsLogin = this.openmoticsLogin.bind(this);
     this.getOMSensorInfo = this.getOMSensorInfo.bind(this);
     this.cToF = this.cToF.bind(this);
     this.getChartData = this.getChartData.bind(this);
+    this.updateMessages = this.updateMessages.bind(this);
   }
 
   async componentDidMount() {
@@ -111,15 +154,77 @@ class App extends React.Component {
 
     // fetches required info for dashboard
     await this.getInfluxInfo();
+    await this.updateMessages();
 
     // set interval to fetch data every 10s
-    this.timer = setInterval(() => this.getInfluxInfo(), 30000);   
+    this.timer = setInterval(() => {
+      this.getInfluxInfo();
+      this.updateMessages();
+    }, 10000);   
 
   } // end componentDidMount
 
   async componentWillUnmount () {
     clearInterval(this.timer);
   }
+
+  updateMessages() {
+    let currentMessages = [];
+
+    if(this.state.airAvgs.temperature <= 60) {
+      currentMessages.push(this.state.messages.alerts.air.lowTemp);
+    } else if (this.state.airAvgs.temperature <= 64) {
+      currentMessages.push(this.state.messages.warnings.air.lowTemp);
+    } else if (this.state.airAvgs.temperature >= 80) {
+      currentMessages.push(this.state.messages.alerts.air.highTemp);
+    } else if (this.state.airAvgs.temperature >= 72) {
+      currentMessages.push(this.state.messages.warnings.air.highTemp);
+    } else {
+      currentMessages.push(this.state.messages.okay.air.temp);
+    }
+    if(this.state.airAvgs.humidity <= 40) {
+      currentMessages.push(this.state.messages.alerts.air.lowHum);
+    } else if (this.state.airAvgs.humidity <= 45) {
+      currentMessages.push(this.state.messages.warnings.air.lowHum);
+    } else if (this.state.airAvgs.humidity >= 65) {
+      currentMessages.push(this.state.messages.alerts.air.highHum);
+    } else if (this.state.airAvgs.humidity >= 60) {
+      currentMessages.push(this.state.messages.warnings.air.highHum);
+    } else {
+      currentMessages.push(this.state.messages.okay.air.hum);
+    }
+
+    if(this.state.waterAvgs.temperature <= 60) {
+      currentMessages.push(this.state.messages.alerts.water.lowTemp);
+    } else if (this.state.waterAvgs.temperature <= 64) {
+      currentMessages.push(this.state.messages.warnings.water.lowTemp);
+    } else if (this.state.waterAvgs.temperature >= 72) {
+      currentMessages.push(this.state.messages.warnings.water.highTemp);
+    } else if (this.state.waterAvgs.temperature >= 68) {
+      currentMessages.push(this.state.messages.alerts.water.highTemp);
+    } else {
+      currentMessages.push(this.state.messages.okay.water.temp);
+    }
+    
+    if(this.state.waterAvgs.level <= -2) {
+      currentMessages.push(this.state.messages.alerts.water.lowLevel);
+    } else if (this.state.waterAvgs.level <= -1) {
+      currentMessages.push(this.state.messages.warnings.water.lowLevel);
+    } else if (this.state.waterAvgs.level >= 2) {
+      currentMessages.push(this.state.messages.alerts.water.highLevel);
+    } else if (this.state.waterAvgs.level >= 1) {
+      currentMessages.push(this.state.messages.warnings.water.highLevel);
+    } else {
+      currentMessages.push(this.state.messages.okay.water.level);
+    }
+    
+    if (currentMessages.length === 0) {
+      currentMessages.push("All systems go!")
+    }
+
+    this.setState({currentMessages});
+  }
+
 
   async getInfluxInfo() {
     /*** InfluxDB ***/
@@ -273,14 +378,20 @@ class App extends React.Component {
           
           <div id="nav">
             <p>Welcome Message</p>
-            <label className="switch">
-              <input type="checkbox" onClick={() => this.setState({page: "details"})}/>
-              <span className="slider round"/>
+              
+            <div>
+            dashboard
+              <label className="switch">
+            <input type="checkbox" onClick={() => this.setState({page: "details"})}/>
+            <span className="slider round"/>
             </label>
+            details
+            </div>
           </div>
 
           <Dashboard lightStatus={lightStatus} pumpStatus={pumpStatus} 
-                      airAvgs={this.state.airAvgs} />
+                      airAvgs={this.state.airAvgs}
+                      waterAvgs={this.state.waterAvgs} messages={this.state.currentMessages} updateMessages={this.updateMessages}/>
         </div >
       );
     } else if (this.state.page === "details") {
@@ -294,10 +405,14 @@ class App extends React.Component {
           <div id="nav">
             <p>Welcome Message</p>
             
-            <label className="switch">
-              <input type="checkbox" checked onClick={() => this.setState({page: "dashboard"})}/>
-              <span className="slider round"/>
+            <div>
+              dashboard
+              <label className="switch">
+            <input type="checkbox" checked onClick={() => this.setState({page: "dashboard"})}/>
+            <span className="slider round"/>
             </label>
+            details
+            </div>
           </div>
 
           <Chart getChartData={this.getChartData}/>
