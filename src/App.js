@@ -109,7 +109,19 @@ class App extends React.Component {
     let year = new Date().getFullYear();
     this.setState({ currentDate: month + "/" + date + "/" + year })
 
+    // fetches required info for dashboard
+    await this.getInfluxInfo();
 
+    // set interval to fetch data every 10s
+    this.timer = setInterval(() => this.getInfluxInfo(), 30000);   
+
+  } // end componentDidMount
+
+  async componentWillUnmount () {
+    clearInterval(this.timer);
+  }
+
+  async getInfluxInfo() {
     /*** InfluxDB ***/
 
     // url to database: https://gigawatt-dbd9c7a7.influxcloud.net:8086
@@ -125,13 +137,13 @@ class App extends React.Component {
 
     // query influx database for current mean temperature and humidity of air
     let queryResults = await influxdb.query(`SELECT mean("temp") AS "mean_temp", mean("hum") as "mean_hum" 
-                    FROM "openmotics"."autogen"."sensor" WHERE time > (now() - 30s)
+                    FROM "openmotics"."autogen"."sensor" WHERE time > (now() - 1d)
                     AND ("id"='0' OR "id"='1' OR "id"='2')`)
 
     console.log(queryResults[0]);
     const { airAvgs } = this.state;
-    airAvgs.temperature = this.cToF(queryResults[0].mean_temp).toFixed(2);
-    airAvgs.humidity = queryResults[0].mean_hum.toFixed(2);
+    airAvgs.temperature = this.cToF(queryResults[0].mean_temp).toFixed(5);
+    airAvgs.humidity = queryResults[0].mean_hum.toFixed(3);
     this.setState({ airAvgs });
 
     // query influxdb for status of lights
@@ -160,11 +172,6 @@ class App extends React.Component {
     this.setState({ outputs });
     this.setState({ waterPumps: status });
     console.log(this.state);
-
-  } // end componentDidMount
-
-  async componentDidUpdate () {
-    
   }
 
   async getChartData(property) {
