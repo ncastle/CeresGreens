@@ -17,7 +17,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      page: "dashboard",
+      page: "details",
       influxdb: null,
       installationId: config.installationId,
       airAvgs: {
@@ -182,6 +182,7 @@ class App extends React.Component {
     } else {
       currentMessages.push(this.state.messages.okay.air.temp);
     }
+
     if(this.state.airAvgs.humidity <= 40) {
       currentMessages.push(this.state.messages.alerts.air.lowHum);
     } else if (this.state.airAvgs.humidity <= 45) {
@@ -247,8 +248,8 @@ class App extends React.Component {
 
     console.log(queryResults[0]);
     const { airAvgs } = this.state;
-    airAvgs.temperature = this.cToF(queryResults[0].mean_temp).toFixed(1);
-    airAvgs.humidity = queryResults[0].mean_hum.toFixed(1);
+    airAvgs.temperature = this.cToF(queryResults[0].mean_temp).toFixed(5);
+    airAvgs.humidity = queryResults[0].mean_hum.toFixed(5);
     this.setState({ airAvgs });
 
     // query influxdb for status of lights
