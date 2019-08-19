@@ -32,13 +32,14 @@
   /* body {
     height: 100vh;
   } */
-  #root {
+
+  body {
     position: relative;
     background-image: linear-gradient(rgba(0, 0, 0, 0.3), #000), url(./imgs/basil-blur-close-up-1391505.jpg);
     background-size: cover;
     background-position: center;
-    background-repeat: repeat-x;
-    height: 100vh;
+    /* background-repeat: repeat-x; */
+    /* height: 100vh; */
   }
 
   .chart-container {
@@ -134,25 +135,6 @@
     height: 75% !important;
   } */
 
-  button {
-    /* position: absolute; */
-    /* top: 12%; */
-    /* right: 5%; */
-  }
-
-  /* #topNav {
-      grid-area: topNav;
-      background-color: #61dafb97;
-    }
-    #navItems {
-      width: 100%;
-      list-style: none;
-      display: flex;
-    }
-    #navItems li {
-      margin-right: 60px;
-      margin-top: 30px;
-    } */
 
   /** Slider **/
   /* CSS from w3 schools */
@@ -375,10 +357,9 @@
     font-size: 0.5em;
   } */
 
+  /***  MEDIA QUERIES ***/
+
   @media screen and (max-width: 770px) {
-    #root {
-      /* height: fit-content; */
-    }
     #dash {
       margin: auto;
       padding: 5%;
@@ -397,10 +378,6 @@
 
     .data {
       font-size: 2.5em;
-    }
-
-    #chart-wrapper {
-      /* margin-bottom: 48%; */
     }
 
     .chart-container {
