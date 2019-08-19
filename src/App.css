@@ -39,7 +39,7 @@
     background-size: cover;
     background-position: center;
     /* background-repeat: repeat-x; */
-    /* height: 100vh; */
+    height: 100vh;
   }
 
   .chart-container {
@@ -97,6 +97,7 @@
 
   #dash {
     /* margin: 5%; */
+    /* margin-bottom: 2%; */
     padding-right: 3%;
     padding-left: 3%;
     display: grid;
@@ -360,6 +361,9 @@
   /***  MEDIA QUERIES ***/
 
   @media screen and (max-width: 770px) {
+    body {
+      height: auto;
+    }
     #dash {
       margin: auto;
       padding: 5%;
@@ -427,6 +431,8 @@
       -ms-transform: translateX(18px);
       transform: translateX(18px);
     }
+    
+    
   }
 
   @media screen and (max-width: 1024px) {
