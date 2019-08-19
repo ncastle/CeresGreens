@@ -18,7 +18,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      page: "dashboard",
+      page: "details",
       influxdb: null,
       installationId: config.installationId,
       airAvgs: {
@@ -69,8 +69,9 @@ class App extends React.Component {
       lights: undefined, // boolean -- "on" or "off"
       waterPumps: undefined, // boolean -- "on" or "off"
       currentDate: undefined,
-      time: new Date(),
+      // time: new Date(),
       timeSeriesData: [],
+      timeScale: 1,   // days
       messages: {
         okay: {
           air: {
@@ -111,7 +112,6 @@ class App extends React.Component {
           }
         },
         currentMessages: ['Loading Messages'],
-
       }
     }
     this.openmoticsLogin = this.openmoticsLogin.bind(this);
@@ -119,13 +119,7 @@ class App extends React.Component {
     this.cToF = this.cToF.bind(this);
     this.getChartData = this.getChartData.bind(this);
     this.updateMessages = this.updateMessages.bind(this);
-    this.timeTick = this.timeTick.bind(this);
-  }
-
-  timeTick() {
-    this.setState({
-      time: new Date()
-    });
+    this.handleChange = this.handleChange.bind(this);
   }
 
   async componentDidMount() {
@@ -170,7 +164,7 @@ class App extends React.Component {
     this.timer = setInterval(() => {
       this.getInfluxInfo();
       this.updateMessages();
-    }, 10000);   
+    }, 100000);   
 
   } // end componentDidMount
 
@@ -290,14 +284,14 @@ class App extends React.Component {
     console.log(this.state);
   }
 
-  async getChartData(property) {
+  async getChartData(property, days) {
 
     const influxdb = new Influx.InfluxDB(`https://${config.dbusername}:${config.dbpassword}@gigawatt-dbd9c7a7.influxcloud.net:8086/openmotics`);
 
     // fetch time series data from influxdb
     let queryResults = await influxdb.query(`SELECT mean("${property}") AS "mean_${property}"
                       FROM "openmotics"."autogen"."sensor"
-                      WHERE time > now() - 3d AND ("id"='2' OR "id"='1' OR "id"='0')
+                      WHERE time > now() - ${days}d AND ("id"='2' OR "id"='1' OR "id"='0')
                       GROUP BY time(30m) FILL(null)`);
     console.log({"time series query": queryResults});
     let seriesData = [];
@@ -370,6 +364,21 @@ class App extends React.Component {
     return celsius * 9 / 5 + 32;
   }
 
+  handleChange(e) {
+    // e.preventDefault();
+    console.log("val:", e.target.value)
+    if(e.target.value === "Day") {
+      this.setState({timeScale: 1})
+    } else if (e.target.value === "Week") {
+      this.setState({timeScale: 7})
+    } else if (e.target.value === "Month") {
+      this.setState({timeScale: 30})
+    } else {
+      console.log("This isn't an option");
+    }
+    
+  }
+
   render() {
     console.log(this.state.waterPumps)
     console.log(this.state.lights)
@@ -386,8 +395,7 @@ class App extends React.Component {
             <h2>basilDash</h2>
 
             <div id="date">
-              <Clock time={this.state.time} currentDate={this.state.currentDate}
-                      tick={this.timeTick}/>
+              <Clock currentDate={this.state.currentDate} />
             </div>
           </div>
           
@@ -416,8 +424,7 @@ class App extends React.Component {
             <img id="logo" src={logo} alt='' />
             <h2>basilDash</h2>
             <div id="date">
-              <Clock time={this.state.time} currentDate={this.state.currentDate}
-                      tick={this.timeTick}/>
+              <Clock currentDate={this.state.currentDate} />
             </div>
           </div>
           <div id="nav">
@@ -433,7 +440,15 @@ class App extends React.Component {
             </div>
           </div>
 
-          <Chart getChartData={this.getChartData}/>
+          <form>
+            <select name="scale" onChange={this.handleChange}>
+              <option value="Day"> Day </option>
+              <option value="Week"> Week </option>
+              <option value="Month"> Month </option>
+            </select>
+            {/* <input type="submit" value="Submit"></input> */}
+          </form>
+          <Chart timeScale={this.state.timeScale} getChartData={this.getChartData}/>
           
         </div>
 
