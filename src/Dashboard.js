@@ -15,14 +15,7 @@ class Dashboard extends React.Component {
     super(props);
   }
 
-  async componentDidMount() {
-    // fetch information
-  }
-
-  async componentDidUpdate() {
-
-  }
-
+  
   render() {
     console.log({'message props':this.props.messages});
     return (

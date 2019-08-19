@@ -5,6 +5,7 @@ import './App.css';
 import logo from './imgs/CG_Logo_Horizontal_Color_a.png';
 import Chart from './Chart';
 import Dashboard from './Dashboard';
+import Clock from './Clock';
 
 const config = require('./config.js');
 // const fs = require('fs');
@@ -17,7 +18,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      page: "details",
+      page: "dashboard",
       influxdb: null,
       installationId: config.installationId,
       airAvgs: {
@@ -68,6 +69,7 @@ class App extends React.Component {
       lights: undefined, // boolean -- "on" or "off"
       waterPumps: undefined, // boolean -- "on" or "off"
       currentDate: undefined,
+      time: new Date(),
       timeSeriesData: [],
       messages: {
         okay: {
@@ -117,6 +119,13 @@ class App extends React.Component {
     this.cToF = this.cToF.bind(this);
     this.getChartData = this.getChartData.bind(this);
     this.updateMessages = this.updateMessages.bind(this);
+    this.timeTick = this.timeTick.bind(this);
+  }
+
+  timeTick() {
+    this.setState({
+      time: new Date()
+    });
   }
 
   async componentDidMount() {
@@ -151,6 +160,7 @@ class App extends React.Component {
     let month = new Date().getMonth() + 1;
     let year = new Date().getFullYear();
     this.setState({ currentDate: month + "/" + date + "/" + year })
+
 
     // fetches required info for dashboard
     await this.getInfluxInfo();
@@ -243,7 +253,7 @@ class App extends React.Component {
 
     // query influx database for current mean temperature and humidity of air
     let queryResults = await influxdb.query(`SELECT mean("temp") AS "mean_temp", mean("hum") as "mean_hum" 
-                    FROM "openmotics"."autogen"."sensor" WHERE time > (now() - 1d)
+                    FROM "openmotics"."autogen"."sensor" WHERE time > (now() - 30s)
                     AND ("id"='0' OR "id"='1' OR "id"='2')`)
 
     console.log(queryResults[0]);
@@ -287,7 +297,7 @@ class App extends React.Component {
     // fetch time series data from influxdb
     let queryResults = await influxdb.query(`SELECT mean("${property}") AS "mean_${property}"
                       FROM "openmotics"."autogen"."sensor"
-                      WHERE time > now() - 5d AND ("id"='2' OR "id"='1' OR "id"='0')
+                      WHERE time > now() - 3d AND ("id"='2' OR "id"='1' OR "id"='0')
                       GROUP BY time(30m) FILL(null)`);
     console.log({"time series query": queryResults});
     let seriesData = [];
@@ -374,7 +384,11 @@ class App extends React.Component {
           <div id="header">
             <img id="logo" src={logo} alt='' />
             <h2>basilDash</h2>
-            <div id="date">{this.state.currentDate}</div>
+
+            <div id="date">
+              <Clock time={this.state.time} currentDate={this.state.currentDate}
+                      tick={this.timeTick}/>
+            </div>
           </div>
           
           <div id="nav">
@@ -401,7 +415,10 @@ class App extends React.Component {
           <div id="header">
             <img id="logo" src={logo} alt='' />
             <h2>basilDash</h2>
-            <div id="date">{this.state.currentDate}</div>
+            <div id="date">
+              <Clock time={this.state.time} currentDate={this.state.currentDate}
+                      tick={this.timeTick}/>
+            </div>
           </div>
           <div id="nav">
             <p>Welcome Message</p>
