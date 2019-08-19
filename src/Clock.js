@@ -27,7 +27,7 @@ class Clock extends React.Component {
     return (
       <div>
         <p>{this.props.currentDate}</p>
-        <p>{this.state.time.toLocaleTimeString()}</p>
+        <p id="time">{this.state.time.toLocaleTimeString()}</p>
       </div>
     );
   }

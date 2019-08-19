@@ -11,6 +11,7 @@ const config = require('./config.js');
 // const fs = require('fs');
 // require influx for use in app
 const Influx = require('influx');
+var moment = require('moment');
 
 
 
@@ -85,14 +86,14 @@ class App extends React.Component {
         },
         warnings: {
           air: {
-            highTemp: 'Warning: Air temperature is 72 or higher, consider turning cooling coil on',
-            lowTemp: 'Warning: Air temperature is 64 or lower, consider turning heating coil on',
-            highHum: 'Warning: Air humidity is 60% or higher, consider turning the dehumidifier on',
-            lowHum: 'Warning: Air humidity is 45% or lower, consider turning the dehumidifier off'
+            highTemp: 'Warning: Air temperature is 72 or higher',
+            lowTemp: 'Warning: Air temperature is 64 or lower',
+            highHum: 'Warning: Air humidity is 60% or higher',
+            lowHum: 'Warning: Air humidity is 45% or lower'
           },
           water: {
-            highTemp: 'Warning: Water temperature is 68 or higher, consider turning chiller on',
-            lowTemp: 'Warning: Water temperature is 64 or lower, consider turning chiller off',
+            highTemp: 'Warning: Water temperature is 68 or higher',
+            lowTemp: 'Warning: Water temperature is 64 or lower',
             highLevel: 'Warning: Water level is +1',
             lowLevel: 'Warning: Water level is -1',
           }
@@ -153,7 +154,7 @@ class App extends React.Component {
     let date = new Date().getDate();
     let month = new Date().getMonth() + 1;
     let year = new Date().getFullYear();
-    this.setState({ currentDate: month + "/" + date + "/" + year })
+    this.setState({ currentDate: moment().format("ddd, MMM D") })
 
 
     // fetches required info for dashboard

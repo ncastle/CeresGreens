@@ -199,6 +199,10 @@
     border-radius: 50%;
   }
 
+  #time {
+    text-align: right;
+  }
+
 
   /* ------------------------------------------- */
 
@@ -227,8 +231,6 @@
     /* overflow: hidden; */
     /* padding-right: 5%; */
   }
-
-  #air-img-box>img {}
 
   #water-content {
     display: flex;
@@ -353,6 +355,8 @@
     margin-top: 5%;
     font-size: 1.4rem;
   }
+
+  
 
   /* .secondary {
     font-size: 0.5em;

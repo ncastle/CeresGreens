@@ -49,6 +49,7 @@ class Chart extends React.Component {
       ]
       },
       options: {
+        // events: null,
         legend: {
           labels: {
             fontSize: 15,
@@ -107,6 +108,7 @@ class Chart extends React.Component {
       ]
       },
       options: {
+        // events: null,
         legend: {
           labels: {
             fontSize: 15,
