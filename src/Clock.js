@@ -4,6 +4,7 @@ class Clock extends React.Component {
   constructor(props) {
     super(props);
     this.state = {time: new Date()};
+    props.setWelcomeMessage(this.state.time.toLocaleTimeString());
   }
 
   componentDidMount() {
@@ -11,6 +12,7 @@ class Clock extends React.Component {
       () => this.tick(),
       1000
     );
+    
   }
 
   componentWillUnmount() {
@@ -22,6 +24,8 @@ class Clock extends React.Component {
       time: new Date()
     });
   }
+
+  
 
   render() {
     return (

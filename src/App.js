@@ -19,7 +19,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      page: "details",
+      page: "dashboard",
       influxdb: null,
       installationId: config.installationId,
       airAvgs: {
@@ -113,7 +113,8 @@ class App extends React.Component {
           }
         },
         currentMessages: ['Loading Messages'],
-      }
+      },
+      welcomeMessage: "Good Morning",
     }
     this.openmoticsLogin = this.openmoticsLogin.bind(this);
     this.getOMSensorInfo = this.getOMSensorInfo.bind(this);
@@ -121,6 +122,7 @@ class App extends React.Component {
     this.getChartData = this.getChartData.bind(this);
     this.updateMessages = this.updateMessages.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.setWelcomeMessage = this.setWelcomeMessage.bind(this);
   }
 
   async componentDidMount() {
@@ -155,6 +157,8 @@ class App extends React.Component {
     let month = new Date().getMonth() + 1;
     let year = new Date().getFullYear();
     this.setState({ currentDate: moment().format("ddd, MMM D") })
+
+    // this.setWelcomeMessage();
 
 
     // fetches required info for dashboard
@@ -229,6 +233,18 @@ class App extends React.Component {
     }
 
     this.setState({currentMessages});
+  }
+
+  setWelcomeMessage(time) {
+    console.log('moment:', time.split(":")[0])
+    // time = "7:00:00 PM"
+    if(time.includes('AM')) {
+      this.setState({welcomeMessage: "Hi there, Good Morning"});
+    } else if(time.includes('PM') && (time.split(":")[0] > 6) && (time.split(":")[0] != 12)) {
+      this.setState({welcomeMessage: "Hi there, Good Evening"});
+    } else {
+      this.setState({welcomeMessage: "Hi there, Good Afternoon"});
+    }
   }
 
 
@@ -396,12 +412,13 @@ class App extends React.Component {
             <h2>basilDash</h2>
 
             <div id="date">
-              <Clock currentDate={this.state.currentDate} />
+              <Clock currentDate={this.state.currentDate} 
+                      setWelcomeMessage={this.setWelcomeMessage}/>
             </div>
           </div>
           
           <div id="nav">
-            <p>Welcome Message</p>
+            <p>{this.state.welcomeMessage}</p>
               
             <div>
             dashboard
@@ -425,11 +442,12 @@ class App extends React.Component {
             <img id="logo" src={logo} alt='' />
             <h2>basilDash</h2>
             <div id="date">
-              <Clock currentDate={this.state.currentDate} />
+              <Clock currentDate={this.state.currentDate}
+                    setWelcomeMessage={this.setWelcomeMessage} />
             </div>
           </div>
           <div id="nav">
-            <p>Welcome Message</p>
+            <p>{this.state.welcomeMessage}</p>
             
             <div>
               dashboard

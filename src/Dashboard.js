@@ -30,9 +30,7 @@ class Dashboard extends React.Component {
 
         <div id="air-content">
           {/* <div className="label">Air:</div>  */}
-          <div id="air-img-box">
             <img src={wind} width="120px" height="120px" alt="" />
-          </div>
           <div id="air-container">
             <div className="data">{this.props.airAvgs.temperature}&#176;F
               <div className="label">Temperature</div>
@@ -44,9 +42,7 @@ class Dashboard extends React.Component {
         </div>
         
         <div id="water-content">
-          <div id="water-img-box">
               <img src={dropborder} width="120px" height="120px" alt=""/>
-          </div>
           <div id="water-container">
             <div className="data">{this.props.waterAvgs.temperature}&#176;F
               <div className="label">Temperature</div>
@@ -58,14 +54,12 @@ class Dashboard extends React.Component {
         </div>
 
         <div id="light-content">
-          <div id="light-img-box">
             { (this.props.lightStatus === "ON") &&
               <img src={bulbOn} width="120px" height="120px" alt=""/>
             }
             { (this.props.lightStatus === "OFF") &&
               <img src={bulbOff} width="120px" height="120px" alt=""/>
             }
-          </div>
           <div id="light-text">
             <strong>Lights</strong>
             <br/>
@@ -74,7 +68,6 @@ class Dashboard extends React.Component {
         </div>
 
         <div id="pump-content">
-          <div id="pump-img-box">
             {/* <img src={waterpump} width="100px" height="100px" alt="water pump svg"/> */}
             { (this.props.pumpStatus === "ON") &&
               <img id="pumpon" src={altwaterpump} width="100px" height="100px" alt=""/>
@@ -82,7 +75,6 @@ class Dashboard extends React.Component {
             { (this.props.pumpStatus === "OFF") &&
               <img src={altwaterpumpoff} width="100px" height="100px" alt=""/>
             }
-          </div>
           <div id="pump-text">
             <strong>Water</strong>
             <br/>
