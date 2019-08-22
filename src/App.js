@@ -7,8 +7,7 @@ import Chart from './Chart';
 import Dashboard from './Dashboard';
 import Clock from './Clock';
 
-// const config = require('./config.js');
-const { config } = process.env;
+const config = require('./config.js');
 // const fs = require('fs');
 // require influx for use in app
 const Influx = require('influx');
@@ -22,7 +21,7 @@ class App extends React.Component {
     this.state = {
       page: "dashboard",
       influxdb: null,
-      installationId: config.installationId,
+      installationId: process.env.installationId || config.installationId,
       airAvgs: {
         humidity: null,
         temperature: null
@@ -255,7 +254,7 @@ class App extends React.Component {
     // url to database: https://gigawatt-dbd9c7a7.influxcloud.net:8086
 
     // testing querying the influx database
-    const influxdb = new Influx.InfluxDB(`https://${config.dbusername}:${config.dbpassword}@gigawatt-dbd9c7a7.influxcloud.net:8086/openmotics`);
+    const influxdb = new Influx.InfluxDB(`https://${process.env.dbusername || config.dbusername}:${process.env.dbpassword || config.dbpassword}@gigawatt-dbd9c7a7.influxcloud.net:8086/openmotics`);
 
     this.setState({influxdb});
 
@@ -304,7 +303,7 @@ class App extends React.Component {
 
   async getChartData(property, days) {
 
-    const influxdb = new Influx.InfluxDB(`https://${config.dbusername}:${config.dbpassword}@gigawatt-dbd9c7a7.influxcloud.net:8086/openmotics`);
+    const influxdb = new Influx.InfluxDB(`https://${process.env.dbusername || config.dbusername}:${process.env.dbpassword || config.dbpassword}@gigawatt-dbd9c7a7.influxcloud.net:8086/openmotics`);
 
     // fetch time series data from influxdb
     let queryResults = await influxdb.query(`SELECT mean("${property}") AS "mean_${property}"
