@@ -7,11 +7,12 @@ import Chart from './Chart';
 import Dashboard from './Dashboard';
 import Clock from './Clock';
 
-const config = require('./config.js');
+// const config = require('./config.js');
 // const fs = require('fs');
 // require influx for use in app
 const Influx = require('influx');
 var moment = require('moment');
+let config;   // safety config var
 
 
 
