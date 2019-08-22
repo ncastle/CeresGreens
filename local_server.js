@@ -3,7 +3,6 @@
 const express = require('express');
 const proxy = require('express-http-proxy');
 const morgan = require('morgan');
-const path = require('path');
 const config = require('./src/config');
 
 const app = express();
@@ -11,12 +10,8 @@ const port = process.env.PORT || 5000;
 
 // test comment
 app.use(morgan('dev'));
-app.use(express.static(path.join(__dirname, 'build')));
-app.use('/proxy', proxy(process.env.baseurl));
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname + '/build/index.html'));
-});
+app.use(express.static('build'));
+app.use('/proxy', proxy(config.baseurl));
 
 
 app.listen(port, () => console.log(`Listening on port ${port}!`));

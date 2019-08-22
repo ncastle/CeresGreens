@@ -7,12 +7,12 @@ import Chart from './Chart';
 import Dashboard from './Dashboard';
 import Clock from './Clock';
 
-// const config = require('./config.js');
+const config = require('./config.js');
 // const fs = require('fs');
 // require influx for use in app
 const Influx = require('influx');
 var moment = require('moment');
-let config;   // safety config var
+//let config;   // safety config var
 
 
 
@@ -21,7 +21,6 @@ class App extends React.Component {
     super(props);
     this.state = {
       page: "dashboard",
-      influxdb: null,
       installationId: process.env.installationId || config.installationId,
       airAvgs: {
         humidity: null,
@@ -71,7 +70,6 @@ class App extends React.Component {
       lights: undefined, // boolean -- "on" or "off"
       waterPumps: undefined, // boolean -- "on" or "off"
       currentDate: undefined,
-      // time: new Date(),
       timeSeriesData: [],
       timeScale: 1,   // days
       messages: {
@@ -109,8 +107,8 @@ class App extends React.Component {
           water: {
             highTemp: '!!! ALERT: Water temperature is 68 or higher !!!',
             lowTemp: '!!! ALERT: Water temperature is 60 or lower !!!',
-            highLevel: '!!! ALERT: Water level is +2 !!!',
-            lowLevel: '!!! ALERT: Water level is -2 !!!'
+            highLevel: '!!! ALERT: Water level is +2 or higher !!!',
+            lowLevel: '!!! ALERT: Water level is -2 or lower !!!'
           }
         },
         currentMessages: ['Loading Messages'],
@@ -120,7 +118,8 @@ class App extends React.Component {
     this.openmoticsLogin = this.openmoticsLogin.bind(this);
     this.getOMSensorInfo = this.getOMSensorInfo.bind(this);
     this.cToF = this.cToF.bind(this);
-    this.getChartData = this.getChartData.bind(this);
+    this.getAirChartData = this.getAirChartData.bind(this);
+    this.getWaterChartData = this.getWaterChartData.bind(this);
     this.updateMessages = this.updateMessages.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.setWelcomeMessage = this.setWelcomeMessage.bind(this);
@@ -168,19 +167,39 @@ class App extends React.Component {
 
     // set interval to fetch data every 10s
     this.timer = setInterval(() => {
+      let temprange = 75 - 55 + 1;
+      let tempnum = 55 + Math.floor(Math.random() * temprange);
+      let levelrange = 3 - (-3) + 1;
+      let levelnum = -3 + Math.floor(Math.random() * levelrange);
+      const { waterAvgs } = this.state;
+      waterAvgs.temperature = tempnum;
+      waterAvgs.level = levelnum;
+      this.setState({waterAvgs})
       this.getInfluxInfo();
       this.updateMessages();
-    }, 100000);   
+    }, 30000);
+
+    // this.timer2 = setInterval(() => {
+    //   let range = 72 - 60 + 1;
+    //   let num = 60 + Math.floor(Math.random() * range);
+    //   const { waterAvgs } = this.state;
+    //   waterAvgs.temperature = num;
+    //   this.setState({waterAvgs})
+    // }, 5000);
 
   } // end componentDidMount
 
   async componentWillUnmount () {
     clearInterval(this.timer);
+    // clearInterval(this.timer2);
   }
 
+  // function reads the state of the app and pushes a set of messages to display
+  // based on the current values for air, water, lights, and water pumps
   updateMessages() {
     let currentMessages = [];
 
+    // push message to array for air temperature
     if(this.state.airAvgs.temperature <= 60) {
       currentMessages.push(this.state.messages.alerts.air.lowTemp);
     } else if (this.state.airAvgs.temperature <= 64) {
@@ -193,6 +212,7 @@ class App extends React.Component {
       currentMessages.push(this.state.messages.okay.air.temp);
     }
 
+    // push message to array for air humidity
     if(this.state.airAvgs.humidity <= 40) {
       currentMessages.push(this.state.messages.alerts.air.lowHum);
     } else if (this.state.airAvgs.humidity <= 45) {
@@ -205,6 +225,7 @@ class App extends React.Component {
       currentMessages.push(this.state.messages.okay.air.hum);
     }
 
+    // push message to array for water temperature
     if(this.state.waterAvgs.temperature <= 60) {
       currentMessages.push(this.state.messages.alerts.water.lowTemp);
     } else if (this.state.waterAvgs.temperature <= 64) {
@@ -217,6 +238,7 @@ class App extends React.Component {
       currentMessages.push(this.state.messages.okay.water.temp);
     }
     
+    // push message to array for water level
     if(this.state.waterAvgs.level <= -2) {
       currentMessages.push(this.state.messages.alerts.water.lowLevel);
     } else if (this.state.waterAvgs.level <= -1) {
@@ -230,12 +252,13 @@ class App extends React.Component {
     }
     
     if (currentMessages.length === 0) {
-      currentMessages.push("All systems go!")
+      currentMessages.push("All systems good!")
     }
 
     this.setState({currentMessages});
   }
 
+  // function that sets the welcome message based on the current time
   setWelcomeMessage(time) {
     console.log('moment:', time.split(":")[0])
     // time = "7:00:00 PM"
@@ -248,20 +271,19 @@ class App extends React.Component {
     }
   }
 
-
+  // function that makes all queries for sensor data
   async getInfluxInfo() {
     /*** InfluxDB ***/
 
     // url to database: https://gigawatt-dbd9c7a7.influxcloud.net:8086
 
-    // testing querying the influx database
+    // connect to influx database
     const influxdb = new Influx.InfluxDB(`https://${process.env.dbusername || config.dbusername}:${process.env.dbpassword || config.dbpassword}@gigawatt-dbd9c7a7.influxcloud.net:8086/openmotics`);
 
-    this.setState({influxdb});
-
-    console.log('connected to database?');
-    influxdb.getDatabaseNames()
-      .then(names => console.log(names));
+    // this.setState({influxdb});
+    // console.log('connected to database?');
+    // influxdb.getDatabaseNames()
+    //   .then(names => console.log(names));
 
     // query influx database for current mean temperature and humidity of air
     let queryResults = await influxdb.query(`SELECT mean("temp") AS "mean_temp", mean("hum") as "mean_hum" 
@@ -270,47 +292,55 @@ class App extends React.Component {
 
     console.log(queryResults[0]);
     const { airAvgs } = this.state;
-    airAvgs.temperature = this.cToF(queryResults[0].mean_temp).toFixed(5);
-    airAvgs.humidity = queryResults[0].mean_hum.toFixed(5);
-    this.setState({ airAvgs });
+    airAvgs.temperature = this.cToF(queryResults[0].mean_temp).toFixed(3);
+    airAvgs.humidity = queryResults[0].mean_hum.toFixed(3);
+
 
     // query influxdb for status of lights
     queryResults = await influxdb.query(`SELECT last("value") AS "last_value" 
                     FROM "openmotics"."autogen"."output" 
-                    WHERE ("id"='14' OR "id"='15')`)
+                    WHERE ("id"='3')`)
+
     console.log(queryResults);
-    let status = true;
-    if (queryResults[0].last_value === 0) status = false;
-    this.setState({ lights: status });
+    let lightStatus = true;
+    // circuts are backwards, so a reading of 100 means lights are off
+    if (queryResults[0].last_value === 100) lightStatus = false;
 
 
-    // query influxdb for status of pumps
+    // query influxdb for status of water pumps
     queryResults = await influxdb.query(`SELECT last("value") AS "last_value" 
                     FROM "openmotics"."autogen"."output" 
                     WHERE ("id"='5' OR "id"='6' OR "id"='7')`);
+
     console.log(queryResults[0]);
-    status = true;
-    if (queryResults[0].last_value === 0) status = false;
+    let pumpStatus = true;
+    if (queryResults[0].last_value === 0) pumpStatus = false;
     const { outputs } = this.state;
-    if (status) {
+    if (pumpStatus) {
       outputs.forEach(output => output.on = true);
     } else {
       outputs.forEach(output => output.on = false);
     }
-    this.setState({ outputs });
-    this.setState({ waterPumps: status });
+
+    this.setState({
+      airAvgs: airAvgs,
+      lights: lightStatus,
+      outputs: outputs,
+      waterPumps: pumpStatus
+    })
     console.log(this.state);
   }
 
-  async getChartData(property, days) {
+  async getAirChartData(property, days) {
 
+    // connect to influx database
     const influxdb = new Influx.InfluxDB(`https://${process.env.dbusername || config.dbusername}:${process.env.dbpassword || config.dbpassword}@gigawatt-dbd9c7a7.influxcloud.net:8086/openmotics`);
 
     // fetch time series data from influxdb
     let queryResults = await influxdb.query(`SELECT mean("${property}") AS "mean_${property}"
                       FROM "openmotics"."autogen"."sensor"
                       WHERE time > now() - ${days}d AND ("id"='2' OR "id"='1' OR "id"='0')
-                      GROUP BY time(30m) FILL(null)`);
+                      GROUP BY time(30m)`);
     console.log({"time series query": queryResults});
     let seriesData = [];
     if(property === 'temp') {
@@ -323,6 +353,35 @@ class App extends React.Component {
       queryResults.forEach(result => {
         seriesData.push({t: result.time,
                           y: result.mean_hum});
+      });
+    }
+    console.log(seriesData);
+    return seriesData;
+  }
+
+  async getWaterChartData(property, days) {
+    // fakedata autogen sensor
+
+    // connect to influx database
+    const influxdb = new Influx.InfluxDB(`https://${process.env.dbusername || config.dbusername}:${process.env.dbpassword || config.dbpassword}@gigawatt-dbd9c7a7.influxcloud.net:8086/openmotics`);
+
+    // fetch time series data from influxdb
+    let queryResults = await influxdb.query(`SELECT mean("${property}") AS "mean_${property}"
+                      FROM "fakedata"."autogen"."sensor"
+                      WHERE time > now() - ${days}d AND ("name"='Water Level #1')
+                      GROUP BY time(30m) FILL(previous)`);
+
+    let seriesData = [];
+    if(property === 'temp') {
+      queryResults.forEach(result => {
+        seriesData.push({t: result.time,
+                          y: this.cToF(result.mean_temp)});
+      });
+    }
+    if (property === 'level') {
+      queryResults.forEach(result => {
+        seriesData.push({t: result.time,
+                          y: result.mean_level});
       });
     }
     console.log(seriesData);
@@ -352,7 +411,7 @@ class App extends React.Component {
       });
   }
 
-  // get OpenMotics sensor information
+  // query OpenMotics for sensor information
   async getOMSensorInfo(token, sensorId) {
     // fetch data using a get path
     // installation-id -> 215, sensor-id -> 0
@@ -383,7 +442,7 @@ class App extends React.Component {
   }
 
   handleChange(e) {
-    console.log("val:", e.target.value)
+    // console.log("val:", e.target.value)
     this.setState({timeScale: e.target.value});    
   }
 
@@ -395,6 +454,7 @@ class App extends React.Component {
     let lightStatus = "OFF";
     if (this.state.lights) lightStatus = "ON";
     
+    // render the dashboard
     if(this.state.page === "dashboard") {
       return (
         <div className="App">
@@ -403,50 +463,48 @@ class App extends React.Component {
             <h2>basilDash</h2>
 
             <div id="date">
-              <Clock currentDate={this.state.currentDate} 
-                      setWelcomeMessage={this.setWelcomeMessage}/>
+              <Clock currentDate={this.state.currentDate} setWelcomeMessage={this.setWelcomeMessage}/>
             </div>
           </div>
           
           <div id="nav">
             <p>{this.state.welcomeMessage}</p>
-              
             <div>
-            dashboard
+              dashboard
               <label className="switch">
-            <input type="checkbox" onClick={() => this.setState({page: "details"})}/>
-            <span className="slider round"/>
-            </label>
-            chart
+              <input type="checkbox" checked={false} onChange={() => this.setState({page: "details"})}/>
+              <span className="slider round"/>
+              </label>
+              chart
             </div>
           </div>
 
-          <Dashboard lightStatus={lightStatus} pumpStatus={pumpStatus} 
-                      airAvgs={this.state.airAvgs}
+          <Dashboard lightStatus={lightStatus} pumpStatus={pumpStatus} airAvgs={this.state.airAvgs}
                       waterAvgs={this.state.waterAvgs} messages={this.state.currentMessages} updateMessages={this.updateMessages}/>
         </div >
       );
+    
     } else if (this.state.page === "details") {
       return (
         <div className="detail-page">
           <div id="header">
             <img id="logo" src={logo} alt='' />
             <h2>basilDash</h2>
+
             <div id="date">
-              <Clock currentDate={this.state.currentDate}
-                    setWelcomeMessage={this.setWelcomeMessage} />
+              <Clock currentDate={this.state.currentDate} setWelcomeMessage={this.setWelcomeMessage} />
             </div>
           </div>
+
           <div id="nav">
             <p>{this.state.welcomeMessage}</p>
-            
             <div>
               dashboard
               <label className="switch">
-            <input type="checkbox" checked onClick={() => this.setState({page: "dashboard"})}/>
-            <span className="slider round"/>
-            </label>
-            chart
+              <input type="checkbox" checked={true} onChange={() => this.setState({page: "dashboard"})}/>
+              <span className="slider round"/>
+              </label>
+              chart
             </div>
           </div>
 
@@ -457,9 +515,9 @@ class App extends React.Component {
               <option value={7}> Week </option>
               <option value={30}> Month </option>
             </select>
-            {/* <input type="submit" value="Submit"></input> */}
           </form>
-          <Chart timeScale={this.state.timeScale} getChartData={this.getChartData}/>
+
+          <Chart timeScale={this.state.timeScale} getAirChartData={this.getAirChartData} getWaterChartData={this.getWaterChartData}/>
           
         </div>
 

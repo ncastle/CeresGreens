@@ -5,17 +5,22 @@ class Chart extends React.Component {
 
   constructor(props){
     super(props);
-    this.changeTimeScale = this.changeTimeScale.bind(this);
-    
+    this.createCharts = this.createCharts.bind(this);
   }
 
   async componentDidMount(){
-    // console.log("props.data:", this.props.data);
-    let tempData = await this.props.getChartData('temp', this.props.timeScale);
-    let humData = await this.props.getChartData('hum', this.props.timeScale);
+    this.createCharts();
+  }
 
-    this.setState({tempData: tempData})
-    console.log({tempData});
+  async componentDidUpdate() {
+    this.createCharts();
+  }
+
+  async createCharts() {
+    let tempData = await this.props.getAirChartData('temp', this.props.timeScale);
+    let humData = await this.props.getAirChartData('hum', this.props.timeScale);
+    let waterTempData = await this.props.getWaterChartData('temp', this.props.timeScale);
+    let waterLevelData = await this.props.getWaterChartData('level', this.props.timeScale);
 
     // chart for air temperature readings
     var tempctx = document.getElementById('tempChart');
@@ -24,7 +29,7 @@ class Chart extends React.Component {
       data: {
         // labels: ['time series data'],
         datasets: [{
-          label: 'TEMPERATURE',
+          label: 'AIR TEMPERATURE',
           data: tempData,
           backgroundColor: [
             'rgba(34, 139, 255, 0.3)',
@@ -35,7 +40,7 @@ class Chart extends React.Component {
           borderWidth: 2
         },
         {
-          label: 'HUMIDITY',
+          label: 'AIR HUMIDITY',
           data: humData,
           backgroundColor: [
             'rgba(234, 139, 0, 0.3)',
@@ -71,20 +76,15 @@ class Chart extends React.Component {
       }
     });
 
-  }
-
-  async componentDidUpdate() {
-    let tempData = await this.props.getChartData('temp', this.props.timeScale);
-    let humData = await this.props.getChartData('hum', this.props.timeScale);
-
-    var tempctx = document.getElementById('tempChart');
-    var tempChart = new Chartjs(tempctx, {
+    // chart for water temperature readings
+    var tempcty = document.getElementById('waterTempChart');
+    var waterChart = new Chartjs(tempcty, {
       type: 'line',
       data: {
         // labels: ['time series data'],
         datasets: [{
-          label: 'TEMPERATURE',
-          data: tempData,
+          label: 'WATER TEMPERATURE',
+          data: waterTempData,
           backgroundColor: [
             'rgba(34, 139, 255, 0.3)',
           ],
@@ -92,10 +92,41 @@ class Chart extends React.Component {
             'rgba(255, 99, 132, 1)',
           ],
           borderWidth: 2
+        }
+      ]
+      },
+      options: {
+        events: ['click'],
+        legend: {
+          labels: {
+            fontSize: 15,
+          }
         },
-        {
-          label: 'HUMIDITY',
-          data: humData,
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: false
+            }
+          }],
+          xAxes: [{
+            type: 'time',
+            time: {
+              unit: 'day'
+            }
+          }]
+        }
+      }
+    });
+
+    // chart for water level readings
+    var tempctz = document.getElementById('waterLevelChart');
+    var waterLevelChart = new Chartjs(tempctz, {
+      type: 'line',
+      data: {
+        // labels: ['time series data'],
+        datasets: [{
+          label: 'WATER LEVEL',
+          data: waterLevelData,
           backgroundColor: [
             'rgba(234, 139, 0, 0.3)',
           ],
@@ -129,13 +160,6 @@ class Chart extends React.Component {
         }
       }
     });
-
-  }
-
-  changeTimeScale(e) {
-    console.log(e.target.value);
-    e.preventDefault();
-    console.log('changing time scale');
   }
 
   
@@ -147,9 +171,12 @@ class Chart extends React.Component {
           <div className="chart-container">
             <canvas id="tempChart"></canvas>
           </div>
-          {/* <div className="chart-container">
-          <canvas id="humChart"></canvas>
-          </div> */}
+          <div className="chart-container">
+            <canvas id="waterTempChart"></canvas>
+          </div>
+          <div className="chart-container">
+            <canvas id="waterLevelChart"></canvas>
+          </div>
         </div>
       </div>
     );
