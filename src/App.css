@@ -139,6 +139,8 @@
     display: inline-block;
     width: 60px;
     height: 34px;
+    margin-right: 10px;
+    margin-left: 10px;
   }
   
   .switch input { 
@@ -196,6 +198,13 @@
 
   #time {
     text-align: right;
+  }
+
+  #scale-dropdown {
+    margin-top: 3%;
+    font-size: 1.2em;
+    border-radius: 3px;
+    border: 2px solid slategray;
   }
 
 
@@ -263,7 +272,8 @@
   }
 
   #light-text {
-    font-size: 2.5em;
+    /* font-size: 2.5em; */
+    font-size: 4vh;
   }
 
   #pump-content {
@@ -282,7 +292,8 @@
   }
 
   #pump-text {
-    font-size: 2.2em;
+    /* font-size: 2.2em; */
+    font-size: 4vh;
   }
 
   #alert-content {
@@ -326,7 +337,7 @@
     color: rgb(200, 0, 0);
   }
   .okay {
-    color: rgb(0, 200, 0);
+    color: rgb(0, 143, 0);
   }
 
   #control-content {
@@ -347,21 +358,23 @@
 
   .data {
     font-weight: bold;
-    font-size: 2.9em;
+    /* font-size: 2.9em; */
+    font-size: 5vh;
   }
 
   .label {
     margin-top: 5%;
-    font-size: 1.4rem;
+    /* font-size: 1.4rem; */
+    font-size: 3vh;
   }
 
   #dash img {
     height: 80%;
   }
 
-  /* .secondary {
-    font-size: 0.5em;
-  } */
+  div[id$="containter"] {
+    color: red;
+  }
 
   /***  MEDIA QUERIES ***/
 
@@ -386,7 +399,7 @@
     }
 
     .data {
-      font-size: 2.5em;
+      /* font-size: 2.5em; */
     }
 
     .chart-container {

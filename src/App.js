@@ -131,31 +131,31 @@ class App extends React.Component {
     let token = null;
     /*** OpenMotics ***/
 
-    token = await this.openmoticsLogin(config.username, config.password);
+    // token = await this.openmoticsLogin(config.username, config.password);
 
-    console.log('this is the token: ', token);
+    // console.log('this is the token: ', token);
 
     // await this.getOMSensorInfo(token, 0);
     // await this.getOMSensorInfo(token, 1);
     // await this.getOMSensorInfo(token, 2);
 
     // fetch outputs 
-    await fetch('/proxy/api/v1/base/installations/215/outputs', {
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-    })
-      .then(response => response.json())
-      .then(json => {
-        console.log(json);
-      });
+    // await fetch('/proxy/api/v1/base/installations/215/outputs', {
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'Accept': 'application/json',
+    //     'Authorization': `Bearer ${token}`
+    //   }
+    // })
+    //   .then(response => response.json())
+    //   .then(json => {
+    //     console.log(json);
+    //   });
 
 
-    let date = new Date().getDate();
-    let month = new Date().getMonth() + 1;
-    let year = new Date().getFullYear();
+    // let date = new Date().getDate();
+    // let month = new Date().getMonth() + 1;
+    // let year = new Date().getFullYear();
     this.setState({ currentDate: moment().format("ddd, MMM D") })
 
     // this.setWelcomeMessage();
@@ -426,7 +426,7 @@ class App extends React.Component {
             <input type="checkbox" onClick={() => this.setState({page: "details"})}/>
             <span className="slider round"/>
             </label>
-            details
+            chart
             </div>
           </div>
 
@@ -455,12 +455,12 @@ class App extends React.Component {
             <input type="checkbox" checked onClick={() => this.setState({page: "dashboard"})}/>
             <span className="slider round"/>
             </label>
-            details
+            chart
             </div>
           </div>
 
           <form>
-            <select name="scale" onChange={this.handleChange}>
+            <select id="scale-dropdown" name="scale" onChange={this.handleChange}>
               <option value="Day"> Day </option>
               <option value="Week"> Week </option>
               <option value="Month"> Month </option>
