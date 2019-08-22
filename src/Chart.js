@@ -49,7 +49,7 @@ class Chart extends React.Component {
       ]
       },
       options: {
-        // events: null,
+        events: ['click'],
         legend: {
           labels: {
             fontSize: 15,
@@ -108,7 +108,7 @@ class Chart extends React.Component {
       ]
       },
       options: {
-        // events: null,
+        events: ['click'],
         legend: {
           labels: {
             fontSize: 15,
@@ -137,8 +137,6 @@ class Chart extends React.Component {
     e.preventDefault();
     console.log('changing time scale');
   }
-
-  
 
   
 
