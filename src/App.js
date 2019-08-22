@@ -7,7 +7,8 @@ import Chart from './Chart';
 import Dashboard from './Dashboard';
 import Clock from './Clock';
 
-const config = require('./config.js');
+// const config = require('./config.js');
+const config = process.env;
 // const fs = require('fs');
 // require influx for use in app
 const Influx = require('influx');
