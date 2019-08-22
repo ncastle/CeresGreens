@@ -1,8 +1,6 @@
-  /* ------------------------------------------- */
-
-  /* COLOR PALETTE */
-
   /* -------------------------------------------
+  COLOR PALETTE:
+
   BLUE => #1E3F6C 
   RED => #ED553E
   YELLOW => #FDCD30
@@ -10,7 +8,7 @@
   GREEN => #428221
   RED => #FC5130
   DARK BLUE => #00284C
-  /* ------------------------------------------- */
+  ------------------------------------------- */
 
   @import url('https://fonts.googleapis.com/css?family=Quicksand:400,500,600&display=swap');
 
@@ -27,11 +25,7 @@
   .detail-page {
     text-align: center;
     font-family: "Quicksand";
-    /* background-color: white; */
   }
-  /* body {
-    height: 100vh;
-  } */
 
   body {
     position: relative;
@@ -62,11 +56,9 @@
     }
   }
 
-  /* ------------------------------------------- */
-
-  /* Desktop */
-
-  /* ------------------------------------------- */
+  /* -------------------------------------------
+                    Desktop
+  ------------------------------------------- */
 
   * {
     margin: 0;
@@ -87,8 +79,6 @@
     min-height: 8vh;
   }
 
-  #header h2 {}
-
   #logo {
     height: 80px;
     width: 200px;
@@ -96,8 +86,6 @@
   }
 
   #dash {
-    /* margin: 5%; */
-    /* margin-bottom: 2%; */
     padding-right: 3%;
     padding-left: 3%;
     display: grid;
@@ -208,11 +196,11 @@
   }
 
 
-  /* ------------------------------------------- */
+  /* -------------------------------------------
 
-  /* CONTENT BOXES */
+                CONTENT BOXES
 
-  /* ------------------------------------------- */
+  ------------------------------------------- */
 
   #air-content {
     display: flex;
@@ -223,17 +211,6 @@
     border-radius: 2px;
     color: #f5f7fa;
     transition: background-color 0.5s ease;
-  }
-
-  #air-content:hover {
-    background-color: rgba(66, 130, 33, 0.482);
-  }
-
-  #air-container {
-    /* position: relative; */
-    /* float: right; */
-    /* overflow: hidden; */
-    /* padding-right: 5%; */
   }
 
   #water-content {
@@ -247,32 +224,18 @@
     transition: background-color 0.5s ease;
   }
 
-  #water-content:hover {
-    background-color: rgba(66, 130, 33, 0.482);
-  }
-
   #light-content {
     display: flex;
     justify-content: space-around;
     align-items: center;
     background: rgba(0, 0, 0, 0.55);
-    /* fallback for old browsers */
-    /* background: -webkit-linear-gradient(to bottom, #ED8F03, #FFB75E); */
-    /* Chrome 10-25, Safari 5.1-6 */
-    /* background: linear-gradient(to bottom, #ED8F03, #FFB75E); */
-    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     grid-area: light-content;
     border-radius: 2px;
     color: #f5f7fa;
     transition: background-color 0.5s ease;
   }
 
-  #light-content:hover {
-    background-color: rgba(66, 130, 33, 0.482);
-  }
-
   #light-text {
-    /* font-size: 2.5em; */
     font-size: 4vh;
   }
 
@@ -287,12 +250,7 @@
     transition: background-color 0.5s ease
   }
 
-  #pump-content:hover {
-    background-color: rgba(66, 130, 33, 0.482);
-  }
-
   #pump-text {
-    /* font-size: 2.2em; */
     font-size: 4vh;
   }
 
@@ -302,10 +260,6 @@
     border-radius: 2px;
     color: #f5f7fa;
     transition: background-color 0.5s ease;
-  }
-
-  #alert-content:hover {
-    background-color: rgba(66, 130, 33, 0.482);
   }
 
   #alert-box {
@@ -340,40 +294,22 @@
     color: rgb(0, 143, 0);
   }
 
-  #control-content {
-    background-color: rgba(0, 0, 0, 0.55);
-    grid-area: control-content;
-    border-radius: 2px;
-    color: #f5f7fa;
-    transition: background-color 0.5s ease;
+  div[id$="content"]:hover {
+    background-color: rgba(66, 130, 33, 0.482) !important;
   }
-
-  #control-content:hover {
-    background-color: rgba(66, 130, 33, 0.482);
-  }
-
-  /* #dash>div>div {
-    font-size: 2rem;
-  } */
 
   .data {
     font-weight: bold;
-    /* font-size: 2.9em; */
     font-size: 5vh;
   }
 
   .label {
     margin-top: 5%;
-    /* font-size: 1.4rem; */
     font-size: 3vh;
   }
 
   #dash img {
     height: 80%;
-  }
-
-  div[id$="containter"] {
-    color: red;
   }
 
   /***  MEDIA QUERIES ***/
@@ -398,15 +334,10 @@
       grid-gap: 10px;
     }
 
-    .data {
-      /* font-size: 2.5em; */
-    }
-
     .chart-container {
       width: 80vw;
       height: auto;
       margin-top: 5%;
-      /* border: 6px solid slategray; */
       padding: 3%;
     }
 
@@ -449,8 +380,6 @@
       -ms-transform: translateX(18px);
       transform: translateX(18px);
     }
-    
-    
   }
 
   @media screen and (max-width: 1024px) {
