@@ -382,18 +382,8 @@ class App extends React.Component {
   }
 
   handleChange(e) {
-    // e.preventDefault();
     console.log("val:", e.target.value)
-    if(e.target.value === "Day") {
-      this.setState({timeScale: 1})
-    } else if (e.target.value === "Week") {
-      this.setState({timeScale: 7})
-    } else if (e.target.value === "Month") {
-      this.setState({timeScale: 30})
-    } else {
-      console.log("This isn't an option");
-    }
-    
+    this.setState({timeScale: e.target.value});    
   }
 
   render() {
@@ -460,10 +450,11 @@ class App extends React.Component {
           </div>
 
           <form>
-            <select id="scale-dropdown" name="scale" onChange={this.handleChange}>
-              <option value="Day"> Day </option>
-              <option value="Week"> Week </option>
-              <option value="Month"> Month </option>
+            <select id="scale-dropdown" name="scale" 
+                  onChange={this.handleChange} value={this.state.timeScale}>
+              <option value={1}> Day </option>
+              <option value={7}> Week </option>
+              <option value={30}> Month </option>
             </select>
             {/* <input type="submit" value="Submit"></input> */}
           </form>
