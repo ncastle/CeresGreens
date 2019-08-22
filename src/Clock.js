@@ -1,5 +1,6 @@
 import React from 'react';
 
+// Clock component based on example from BCA lecture slides
 class Clock extends React.Component {
   constructor(props) {
     super(props);
@@ -12,7 +13,9 @@ class Clock extends React.Component {
       () => this.tick(),
       1000
     );
-    
+    this.messageID = setInterval(
+      () => this.props.setWelcomeMessage(), 3600000
+    );
   }
 
   componentWillUnmount() {
@@ -25,8 +28,7 @@ class Clock extends React.Component {
     });
   }
 
-  
-
+  // render clock to screen
   render() {
     return (
       <div>
